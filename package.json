@@ -1,5 +1,11 @@
 {
   "name": "portfolio",
+  "description": "a lil' selection of work Jake is most proud of 🤓",
+  "author": {
+    "name": "Jake Cheek",
+    "url": "https://jake.cafe/"
+  },
+  "license": "GPL-3.0-or-later",
   "scripts": {
     "dev": "next",
     "build": "next build",
