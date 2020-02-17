@@ -1,0 +1,139 @@
+@import '../../styles/colors';
+@import '../../styles/fonts';
+
+@headerOffset: 32px;
+@blurbSize: 10px;
+@titleOffset: @headerOffset + @blurbSize + 8px;
+
+.wrapper {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	background: @background;
+}
+
+.menu {
+	padding-top: 60px;
+	padding-bottom: 50px;
+	padding-left: 80px;
+	padding-right: 40px;
+
+	text-align: right;
+	font-family: @RobotoMono;
+
+	background: @lightBackground;
+	border: 1px solid @lighterBackground;
+
+	transform: perspective(100px);
+	transform-style: preserve-3d;
+}
+
+.title {
+	position: relative;
+	padding-bottom: @titleOffset;
+	border-bottom: 1px solid @lighterBackground;
+	
+	font-size: 24px;
+	font-weight: bold;
+
+	.text {
+		color: @red;
+		transform: translateZ(16px);
+	}
+
+	.shadow {
+		color: fade(black, 50%);
+		filter: blur(4px);
+	}
+}
+
+.blurb {
+	position: relative;
+	top: -@titleOffset - 6px;
+
+	font-size: @blurbSize;
+	font-weight: normal;
+
+	.text {
+		color: @darkForeground;
+		transform: translateZ(12px);
+	}
+
+	.shadow {
+		color: fade(black, 75%);
+		filter: blur(2px);
+	}
+}
+
+.header {
+	position: relative;
+	margin-top: @headerOffset;
+	margin-bottom: 4px;
+
+	font-size: 14px;
+	font-weight: bold;
+
+	.text { color: @foreground }
+}
+
+.item {
+	position: relative;
+	margin-bottom: 2px;
+	
+	font-size: 13px;
+	font-weight: normal;
+	a { text-decoration: none }
+
+	.text {
+		position: relative;
+		right: 0;
+		color: @darkForeground;
+		transition: all 0.25s;
+	}
+
+	.icon {
+		position: absolute;
+		top: 2px;
+		right: -16px;
+		opacity: 0;
+		transition: all 0.25s;
+	}
+
+	&:hover {
+		.text {
+			right: 18px;
+			color: @foreground;
+			font-weight: bold;
+		}
+
+		.icon {
+			right: 0;
+			opacity: 1;
+		}
+	}
+}
+
+.shadow {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.icon {
+	&.book { color: #D81B60; }
+	&.spotify { color: #1ED760; }
+	&.car { color: #F5CE85; }
+	&.gamepad { color: #019889; }
+	&.hashtag { color: desaturate(#FF0022, 40%); }
+	&.github { color: @darkForeground; }
+	&.linkedin { color: #0077B5; }
+	&.music { color: #D8885D; }
+	&.instagram { color: #E4405F; }
+}

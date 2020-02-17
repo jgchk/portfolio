@@ -7,7 +7,6 @@ module.exports = {
   },
   plugins: ['@typescript-eslint'],
   extends: [
-    'airbnb',
     'airbnb-typescript',
     'airbnb/hooks',
     'plugin:@typescript-eslint/eslint-recommended',
@@ -24,5 +23,6 @@ module.exports = {
     'import/no-named-as-default-member': 'off',
     indent: 'off',
     '@typescript-eslint/indent': 'off',
+    '@typescript-eslint/unbound-method': 'off',
   },
 }
