@@ -7380,6 +7380,7 @@ fsevents@~2.1.2:
     react-dom: ^16.12.0
     react-fontawesome: ^1.7.1
     typescript: ^3.7.5
+    yarn: ^1.22.0
   languageName: unknown
   linkType: soft
 
@@ -10243,5 +10244,15 @@ typescript@^3.7.5:
   dependencies:
     "@babel/runtime": ^7.6.3
   checksum: 2/8b5d70dfff792ef1fa4728a86052d2fa63698535b90bf3cf7c7d56412f08e351c2bb91e20b395225595f9b68ec67f83aaa18d0441a9e771d8a23ff67db44cee4
+  languageName: node
+  linkType: hard
+
+"yarn@npm:^1.22.0":
+  version: 1.22.0
+  resolution: "yarn@npm:1.22.0"
+  bin:
+    yarn: ./bin/yarn.js
+    yarnpkg: ./bin/yarn.js
+  checksum: 2/b9d4746f49490bc05b51f997d5c798dc78fc431eb6f6e18a198acd3647a609fbed2773c3ded5803f74cb27224161f86746693dcc0414923cc8e9c02a012ab224
   languageName: node
   linkType: hard

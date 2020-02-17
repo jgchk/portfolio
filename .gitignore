@@ -2,3 +2,5 @@
 .yarn/build-state.yml
 .next
 node_modules
+
+.now
