@@ -35,8 +35,7 @@
     "husky": ">=4",
     "lint-staged": ">=10",
     "prettier": "^1.19.1",
-    "typescript": "^3.7.5",
-    "yarn": "^1.22.0"
+    "typescript": "^3.7.5"
   },
   "husky": {
     "hooks": {
