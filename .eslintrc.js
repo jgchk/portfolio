@@ -17,4 +17,12 @@ module.exports = {
     'prettier/@typescript-eslint',
     'prettier/react',
   ],
+  rules: {
+    'import/named': 'off',
+    'import/namespace': 'off',
+    'import/default': 'off',
+    'import/no-named-as-default-member': 'off',
+    indent: 'off',
+    '@typescript-eslint/indent': 'off',
+  },
 }
