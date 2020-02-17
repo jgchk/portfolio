@@ -10,6 +10,11 @@ const projects = [
     icon: 'spotify',
   },
   {
+    text: 'portfolio',
+    url: 'https://github.com/jgchk/portfolio',
+    icon: 'briefcase',
+  },
+  {
     text: 'auto-dm',
     url: 'https://github.com/redline-forensics/auto-dm',
     icon: 'car',
