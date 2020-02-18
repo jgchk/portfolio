@@ -4,3 +4,4 @@ declare module '*.less' {
 }
 
 declare module 'bandcamp-scraper'
+declare module 'disconnect'

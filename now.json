@@ -1,6 +1,8 @@
 {
   "env": {
     "SPOTIFY_ID": "@spotify-id",
-    "SPOTIFY_SECRET": "@spotify-secret"
+    "SPOTIFY_SECRET": "@spotify-secret",
+    "DISCOGS_KEY": "@discogs-key",
+    "DISCOGS_SECRET": "@discogs-secret"
   }
 }
