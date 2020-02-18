@@ -10,30 +10,37 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "prettier --list-different \"./**/*.{ts,js,json,md}\" && eslint --ext .js,.jsx,.ts,.tsx ./",
-    "fix": "prettier --write \"./**/*.{ts,js,json,md}\" && eslint --fix --ext .js,.jsx,.ts,.tsx ./",
+    "lint": "prettier --list-different \"./**/*.{js,jsx,ts,tsx,json,css,less,md}\" && eslint --ext .js,.jsx,.ts,.tsx ./",
+    "fix": "prettier --write \"./**/*.{js,jsx,ts,tsx,json,css,less,md}\" && eslint --fix --ext .js,.jsx,.ts,.tsx ./",
     "test": "yarn run lint"
   },
   "dependencies": {
     "@zeit/next-less": "^1.0.1",
+    "bandcamp-scraper": "^1.2.4",
     "classnames": "^2.2.6",
+    "disconnect": "^1.2.1",
+    "dotenv": "^8.2.0",
     "less": "^3.11.1",
     "next": "^9.2.1",
     "react": "^16.12.0",
     "react-dom": "^16.12.0",
-    "react-fontawesome": "^1.7.1"
+    "react-fontawesome": "^1.7.1",
+    "spotify-web-api-node": "^4.0.0",
+    "ytsr": "^0.1.10"
   },
   "devDependencies": {
     "@types/classnames": "^2.2.9",
     "@types/node": "^13.7.1",
     "@types/react": "^16.9.19",
     "@types/react-fontawesome": "^1.6.4",
+    "@types/spotify-web-api-node": "^4.0.1",
     "@typescript-eslint/eslint-plugin": "^2.19.2",
-    "@typescript-eslint/parser": "^2.19.2",
+    "@typescript-eslint/parser": "^2.20.0",
     "eslint": "^6.8.0",
     "eslint-config-airbnb": "^18.0.1",
     "eslint-config-airbnb-typescript": "^7.0.0",
     "eslint-config-prettier": "^6.10.0",
+    "eslint-import-resolver-typescript": "^2.0.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-jsx-a11y": "^6.2.3",
     "eslint-plugin-react": "^7.18.3",
@@ -50,6 +57,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,css,less,md}": "prettier --write"
   }
 }

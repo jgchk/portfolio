@@ -5,7 +5,15 @@ module.exports = {
     tsconfigRootDir: __dirname,
     project: ['./tsconfig.json'],
   },
-  plugins: ['@typescript-eslint'],
+  plugins: ['@typescript-eslint', 'import'],
+  settings: {
+    'import/parsers': {
+      '@typescript-eslint/parser': ['.ts', '.tsx'],
+    },
+    'import/resolver': {
+      typescript: {},
+    },
+  },
   extends: [
     'airbnb',
     'airbnb-typescript',
@@ -25,5 +33,6 @@ module.exports = {
     indent: 'off',
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/unbound-method': 'off',
+    'spaced-comment': ['error', 'always', { line: { markers: ['/'] } }],
   },
 }
