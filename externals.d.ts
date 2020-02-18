@@ -6,4 +6,4 @@ declare module '*.less' {
 
 declare module 'bandcamp-scraper'
 declare module 'disconnect'
-declare module 'yt-search'
+declare module 'ytsr'
