@@ -7,3 +7,4 @@ declare module '*.less' {
 declare module 'bandcamp-scraper'
 declare module 'disconnect'
 declare module 'ytsr'
+declare module 'soundcloud-api-client'
