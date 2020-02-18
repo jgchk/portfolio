@@ -3,4 +3,4 @@
 .next
 node_modules
 .now
-credentials
+.env

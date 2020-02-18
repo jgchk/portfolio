@@ -3,6 +3,8 @@ const withLess = require('@zeit/next-less')
 const path = require('path')
 const { readdirSync } = require('fs')
 
+require('dotenv').config()
+
 const dirs = readdirSync(__dirname, { withFileTypes: true })
   .filter(
     dirent =>
