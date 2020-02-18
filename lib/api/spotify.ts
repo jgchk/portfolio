@@ -1,6 +1,5 @@
 /// <reference types="@types/spotify-api" />
 import SpotifyWebApi from 'spotify-web-api-node'
-import credentials from 'credentials/spotify'
 
 interface Tokens {
   accessToken: string
@@ -22,8 +21,8 @@ export function isSearchTypes(strs: string[]): strs is SearchType[] {
 let expireTime = new Date()
 
 const Spotify = new SpotifyWebApi({
-  clientId: credentials.id,
-  clientSecret: credentials.secret,
+  clientId: process.env.SPOTIFY_ID,
+  clientSecret: process.env.SPOTIFY_SECRET,
 })
 
 async function authorize(): Promise<void> {
