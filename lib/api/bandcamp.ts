@@ -91,7 +91,7 @@ export function album(url: string): Promise<AlbumInfo> {
 
 export function search(query: string): Promise<SearchResults> {
   return new Promise((resolve, reject) => {
-    Bandcamp.search({query}, (error: Error, searchResults: SearchResults) => {
+    Bandcamp.search({ query }, (error: Error, searchResults: SearchResults) => {
       if (error) {
         reject(error)
       } else {

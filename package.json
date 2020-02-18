@@ -10,8 +10,8 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "prettier --list-different \"./**/*.{ts,js,json,md}\" && eslint --ext .js,.jsx,.ts,.tsx ./",
-    "fix": "prettier --write \"./**/*.{ts,js,json,md}\" && eslint --fix --ext .js,.jsx,.ts,.tsx ./",
+    "lint": "prettier --list-different \"./**/*.{js,jsx,ts,tsx,json,css,less,md}\" && eslint --ext .js,.jsx,.ts,.tsx ./",
+    "fix": "prettier --write \"./**/*.{js,jsx,ts,tsx,json,css,less,md}\" && eslint --fix --ext .js,.jsx,.ts,.tsx ./",
     "test": "yarn run lint"
   },
   "dependencies": {
@@ -56,6 +56,6 @@
   },
   "lint-staged": {
     "*.{js,jsx,ts,tsx}": "eslint --cache --fix",
-    "*.{js,css,md}": "prettier --write"
+    "*.{js,jsx,ts,tsx,json,css,less,md}": "prettier --write"
   }
 }
