@@ -3,6 +3,7 @@
     "SPOTIFY_ID": "@spotify-id",
     "SPOTIFY_SECRET": "@spotify-secret",
     "DISCOGS_KEY": "@discogs-key",
-    "DISCOGS_SECRET": "@discogs-secret"
+    "DISCOGS_SECRET": "@discogs-secret",
+    "SOUNDCLOUD_ID": "@soundcloud-id"
   }
 }
