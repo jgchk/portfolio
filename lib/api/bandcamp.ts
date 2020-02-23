@@ -1,102 +1,96 @@
-import Bandcamp from 'bandcamp-scraper'
+import Bandcamp, {
+  AlbumInfo,
+  SearchResult,
+  AlbumResult,
+} from 'bandcamp-scraper'
+import Promise from 'bluebird'
 
-interface AlbumInfo {
-  artist: string
-  title: string
-  url: string
-  imageUrl: string
-  tracks: Track[]
-  raw: {
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    [k: string]: any
+import { sortMostSimilar } from 'lib/string'
+import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
+import { formatMilliseconds } from 'lib/time'
+
+const BC = {
+  getAlbumInfo: Promise.promisify(Bandcamp.getAlbumInfo),
+  search: Promise.promisify(Bandcamp.search),
+}
+
+function formatAlbumInfo(albumInfo: AlbumInfo): Release {
+  const date = new Date(
+    albumInfo.raw.album_release_date || albumInfo.raw.current.release_date
+  )
+
+  let type
+  const { length } = albumInfo.raw.trackinfo
+  if (length < 3) {
+    type = 'single'
+  } else if (length < 7) {
+    type = 'ep'
+  } else {
+    type = 'album'
+  }
+
+  const tracks = albumInfo.raw.trackinfo.map((track, i) => {
+    const position =
+      length === 1
+        ? 1
+        : track.track_num ||
+          (i > 0 &&
+            parseInt(albumInfo.raw.trackinfo[i - 1].track_num, 10) + 1) ||
+          i + 1
+    return {
+      position: String(position),
+      title: track.title,
+      duration: formatMilliseconds(track.duration * 1000),
+    }
+  })
+
+  return {
+    title: albumInfo.title,
+    format: 'lossless digital',
+    attributes: ['downloadable', 'streaming'],
+    date,
+    link: albumInfo.url,
+    type,
+    tracks,
   }
 }
 
-interface Track {
-  name: string
-  url?: string
-  duration?: string
+function test(url: string): boolean {
+  const regex = /((http:\/\/(.*\.bandcamp\.com\/|.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*))|(https:\/\/(.*\.bandcamp\.com\/|.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i
+  return regex.test(url)
 }
 
-type SearchResults = Array<SearchResult>
-
-type SearchResult =
-  | ArtistResult
-  | AlbumResult
-  | TrackResult
-  | FanResult
-  | LabelResult
-
-interface ArtistResult {
-  type: 'artist'
-  name: string
-  url: string
-  imageUrl: string
-  tags: string[]
-  genre?: string
-  location: string
+async function resolve(url: string): Promise<Release> {
+  const albumInfo = await BC.getAlbumInfo(url)
+  return formatAlbumInfo(albumInfo)
 }
 
-interface AlbumResult {
-  type: 'album'
-  name: string
-  url: string
-  imageUrl: string
-  tags: string[]
-  releaseDate: string
-  artist: string
-  numTracks: number
-  numMinutes: number
+function isAlbumResult(result: SearchResult): result is AlbumResult {
+  return result.type === 'album'
 }
 
-interface TrackResult {
-  type: 'track'
-  name: string
-  url: string
-  imageUrl: string
-  tags: string[]
-  releaseDate: string
-  album: string
-  artist: string
+async function search(
+  title: string,
+  artist: string,
+  limit?: number
+): Promise<Array<Release>> {
+  const query = `${title} ${artist}`
+  const results = await BC.search({ query })
+  const filteredResults = results.filter(isAlbumResult)
+  const sortedResults = sortMostSimilar(
+    query,
+    filteredResults,
+    item => `${item.name} ${item.artist}`
+  ).reverse()
+  const limitedResults = sortedResults.slice(0, limit || sortedResults.length)
+  return Promise.map(limitedResults, result => resolve(result.url))
 }
 
-interface FanResult {
-  type: 'fan'
-  name: string
-  url: string
-  imageUrl: string
-  tags: string[]
-  genre: string
+const api: Api & Searchable & Resolvable = {
+  name: 'Bandcamp',
+  search,
+  test,
+  resolve,
 }
 
-interface LabelResult {
-  type: string
-  name: string
-  url: string
-  imageUrl: string
-  tags: string[]
-}
-
-export function album(url: string): Promise<AlbumInfo> {
-  return new Promise((resolve, reject) => {
-    Bandcamp.getAlbumInfo(url, (error: Error, albumInfo: AlbumInfo) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(albumInfo)
-      }
-    })
-  })
-}
-
-export function search(query: string): Promise<SearchResults> {
-  return new Promise((resolve, reject) => {
-    Bandcamp.search({ query }, (error: Error, searchResults: SearchResults) => {
-      if (error) {
-        reject(error)
-      } else {
-        resolve(searchResults)
-      }
-    })
-  })
-}
+export default api

@@ -16,22 +16,18 @@
     "baseUrl": ".",
     "paths": {
       "*": [
-        "*",
         "api/*",
         "components/*",
         "hooks/*",
         "lib/*",
         "pages/*",
-        "styles/*"
+        "styles/*",
+        "types/*",
+        "*"
       ]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./types"]
   },
   "exclude": ["node_modules"],
-  "include": [
-    "next.config.js",
-    "externals.d.ts",
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ]
+  "include": ["next.config.js", "**/*.ts", "**/*.tsx"]
 }
