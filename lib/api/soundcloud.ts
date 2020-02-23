@@ -19,7 +19,7 @@ async function getReleaseDate(release: Track | Playlist): Promise<Date> {
   const response = await fetch(url)
   const html = await response.text()
 
-  const regex = /"display_date":"[^"]+"/gm
+  const regex = /"display_date":"([^"]+)"/gm
   const match = regex.exec(html)
   if (!match) throw Error(`unable to find date for url: ${url}`)
   const date = match[1]
