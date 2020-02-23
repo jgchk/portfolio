@@ -1,5 +1,6 @@
 import YTSearch from 'ytsr'
 import YTInfo, { VideoInfo } from 'youtube-info'
+import getArtistTitle from 'get-artist-title'
 import Promise from 'bluebird'
 
 import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
@@ -7,10 +8,16 @@ import { sortMostSimilar } from 'lib/string'
 
 const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
 
+function getTitle(str: string): string {
+  const artistTitle = getArtistTitle(str, { defaultArtist: '' })
+  return artistTitle ? artistTitle[1] : str
+}
+
 function formatRelease(info: VideoInfo): Release {
   const date = new Date(info.datePublished)
+  const title = getTitle(info.title)
   return {
-    title: info.title,
+    title,
     format: 'digital file',
     attributes: ['streaming'],
     date,

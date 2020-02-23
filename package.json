@@ -21,6 +21,7 @@
     "classnames": "^2.2.6",
     "disconnect": "^1.2.1",
     "dotenv": "^8.2.0",
+    "get-artist-title": "jgchk/get-artist-title",
     "less": "^3.11.1",
     "next": "^9.2.1",
     "node-fetch": "^2.6.0",
