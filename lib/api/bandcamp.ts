@@ -31,9 +31,12 @@ function formatAlbumInfo(albumInfo: AlbumInfo): Release {
 
   const tracks = albumInfo.raw.trackinfo.map((track, i) => {
     const position =
-      track.track_num ||
-      (i > 0 && parseInt(albumInfo.raw.trackinfo[i - 1].track_num, 10) + 1) ||
-      i + 1
+      length === 1
+        ? 1
+        : track.track_num ||
+          (i > 0 &&
+            parseInt(albumInfo.raw.trackinfo[i - 1].track_num, 10) + 1) ||
+          i + 1
     return {
       position: String(position),
       title: track.title,
