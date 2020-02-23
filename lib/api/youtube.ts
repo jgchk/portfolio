@@ -5,6 +5,8 @@ import Promise from 'bluebird'
 import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
 import { sortMostSimilar } from 'lib/string'
 
+const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
+
 function formatRelease(info: VideoInfo): Release {
   const date = new Date(info.datePublished)
   return {
@@ -16,8 +18,11 @@ function formatRelease(info: VideoInfo): Release {
   }
 }
 
+function test(url: string): boolean {
+  return regex.test(url)
+}
+
 async function resolve(url: string): Promise<Release> {
-  const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
   const match = regex.exec(url)
   if (!match) throw new Error(`invalid url: ${url}`)
   const id = match[1]
@@ -61,6 +66,7 @@ async function search(
 const api: Api & Searchable & Resolvable = {
   name: 'YouTube',
   search,
+  test,
   resolve,
 }
 

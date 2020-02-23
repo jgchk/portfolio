@@ -27,5 +27,10 @@ export function isSearchable(api: Api): api is Api & Searchable {
 }
 
 export interface Resolvable {
+  test(url: string): boolean
   resolve(url: string): Promise<Release>
+}
+
+export function isResolvable(api: Api): api is Api & Resolvable {
+  return 'test' in api && 'resolve' in api
 }

@@ -52,6 +52,11 @@ function formatAlbumInfo(albumInfo: AlbumInfo): Release {
   }
 }
 
+function test(url: string): boolean {
+  const regex = /((http:\/\/(.*\.bandcamp\.com\/|.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*))|(https:\/\/(.*\.bandcamp\.com\/|.*\.bandcamp\.com\/track\/.*|.*\.bandcamp\.com\/album\/.*)))/i
+  return regex.test(url)
+}
+
 async function resolve(url: string): Promise<Release> {
   const albumInfo = await BC.getAlbumInfo(url)
   return formatAlbumInfo(albumInfo)
@@ -81,6 +86,7 @@ async function search(
 const api: Api & Searchable & Resolvable = {
   name: 'Bandcamp',
   search,
+  test,
   resolve,
 }
 

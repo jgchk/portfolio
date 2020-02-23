@@ -78,6 +78,11 @@ async function formatRelease(release: Track | Playlist): Promise<Release> {
   }
 }
 
+function test(url: string): boolean {
+  const regex = /((http:\/\/(soundcloud\.com\/.*|soundcloud\.com\/.*\/.*|soundcloud\.com\/.*\/sets\/.*|soundcloud\.com\/groups\/.*|snd\.sc\/.*))|(https:\/\/(soundcloud\.com\/.*|soundcloud\.com\/.*\/.*|soundcloud\.com\/.*\/sets\/.*|soundcloud\.com\/groups\/.*)))/i
+  return regex.test(url)
+}
+
 async function resolve(url: string): Promise<Release> {
   const data = await SC.get('/resolve', { url })
   return formatRelease(data)
@@ -113,6 +118,7 @@ async function search(
 const api: Api & Searchable & Resolvable = {
   name: 'SoundCloud',
   search,
+  test,
   resolve,
 }
 

@@ -6,6 +6,8 @@ import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
 import { sortMostSimilar } from 'lib/string'
 import { formatMilliseconds } from 'lib/time'
 
+const regex = /(((http|https):\/\/)?(open\.spotify\.com\/.*|play\.spotify\.com\/.*))(album|track)\/([a-zA-Z0-9]+)/i
+
 interface Tokens {
   accessToken: string
   refreshToken: string
@@ -133,8 +135,11 @@ function formatRelease(
   }
 }
 
+function test(url: string): boolean {
+  return regex.test(url)
+}
+
 async function resolve(url: string): Promise<Release> {
-  const regex = /(((http|https):\/\/)?(open\.spotify\.com\/.*|play\.spotify\.com\/.*))(album|track)\/([a-zA-Z0-9]+)/i
   const match = regex.exec(url)
   if (!match) throw new Error(`invalid url: ${url}`)
   const type = match[5]
@@ -185,6 +190,7 @@ async function search(
 const api: Api & Searchable & Resolvable = {
   name: 'Spotify',
   search,
+  test,
   resolve,
 }
 

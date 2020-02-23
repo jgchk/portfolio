@@ -4,6 +4,8 @@ import Promise from 'bluebird'
 import { sortMostSimilar } from 'lib/string'
 import { Api, Searchable, Resolvable, Release } from './type'
 
+const regex = /((http|https):\/\/)?(.*\.)?(discogs\.com)?\/(.+)\/(release|master)\/(\d+)/i
+
 const Discogs = new DiscogsApi.Client({
   consumerKey: process.env.DISCOGS_KEY || '',
   consumerSecret: process.env.DISCOGS_SECRET || '',
@@ -73,8 +75,11 @@ function formatRelease(release: Database.Release): Release {
   }
 }
 
+function test(url: string): boolean {
+  return regex.test(url)
+}
+
 async function resolve(url: string): Promise<Release> {
-  const regex = /((http|https):\/\/)?(.*\.)?(discogs\.com)?\/(.+)\/(release|master)\/(\d+)/i
   const match = regex.exec(url)
   if (!match) throw new Error(`invalid url: ${url}`)
   const type = match[6]
@@ -116,6 +121,7 @@ async function search(
 const api: Api & Searchable & Resolvable = {
   name: 'Discogs',
   search,
+  test,
   resolve,
 }
 
