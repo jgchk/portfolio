@@ -3,8 +3,3 @@ declare module '*.less' {
   const content: any
   export default content
 }
-
-declare module 'bandcamp-scraper'
-declare module 'disconnect'
-declare module 'ytsr'
-declare module 'soundcloud-api-client'
