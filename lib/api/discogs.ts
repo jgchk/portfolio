@@ -2,7 +2,7 @@ import DiscogsApi, { Database } from 'disconnect'
 import Promise from 'bluebird'
 
 import { sortMostSimilar } from 'lib/string'
-import { Api, Searchable, Resolvable, Release } from './type'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const regex = /((http|https):\/\/)?(.*\.)?(discogs\.com)?\/(.+)\/(release|master)\/(\d+)/i
 
@@ -101,6 +101,7 @@ async function resolve(url: string): Promise<Release> {
 async function search(
   title: string,
   artist: string,
+  _type: SearchType,
   limit?: number
 ): Promise<Array<Release>> {
   const query = `${artist} - ${title}`
