@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Promise from 'bluebird'
 
 import { first } from 'lib/array'
-import apis from 'lib/api'
-import { isResolvable } from 'lib/api/type'
+import apis from 'lib/api/streaming'
+import { isResolvable } from 'lib/api/streaming/type'
 
 export default async (
   req: NextApiRequest,

@@ -2,9 +2,9 @@
 import SpotifyWebApi from 'spotify-web-api-node'
 import Promise from 'bluebird'
 
-import { Api, Searchable, Resolvable, Release, SearchType } from 'lib/api/type'
 import { sortMostSimilar } from 'lib/string'
 import { formatMilliseconds } from 'lib/time'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const regex = /(((http|https):\/\/)?(open\.spotify\.com\/.*|play\.spotify\.com\/.*))(album|track)\/([a-zA-Z0-9]+)/i
 

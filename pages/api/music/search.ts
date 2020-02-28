@@ -2,8 +2,8 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Promise from 'bluebird'
 
 import { first, asArray } from 'lib/array'
-import apis, { apiMap } from 'lib/api'
-import { isSearchable, isSearchType } from 'lib/api/type'
+import apis, { apiMap } from 'lib/api/streaming'
+import { isSearchable, isSearchType } from 'lib/api/streaming/type'
 
 export default async (
   req: NextApiRequest,

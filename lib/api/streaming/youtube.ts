@@ -3,8 +3,8 @@ import YTInfo, { VideoInfo } from 'youtube-info'
 import getArtistTitle from 'get-artist-title'
 import Promise from 'bluebird'
 
-import { Api, Searchable, Resolvable, Release, SearchType } from 'lib/api/type'
 import { sortMostSimilar } from 'lib/string'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
 

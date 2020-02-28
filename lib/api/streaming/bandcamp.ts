@@ -7,8 +7,8 @@ import Bandcamp, {
 import Promise from 'bluebird'
 
 import { sortMostSimilar } from 'lib/string'
-import { Api, Searchable, Resolvable, Release, SearchType } from 'lib/api/type'
 import { formatMilliseconds } from 'lib/time'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const BC = {
   getAlbumInfo: Promise.promisify(Bandcamp.getAlbumInfo),
