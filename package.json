@@ -15,7 +15,9 @@
     "test": "yarn run lint"
   },
   "dependencies": {
+    "@music-metadata/s3": "^0.6.0",
     "@zeit/next-less": "^1.0.1",
+    "aws-sdk": "^2.626.0",
     "bandcamp-scraper": "^1.2.4",
     "bluebird": "^3.7.2",
     "classnames": "^2.2.6",
