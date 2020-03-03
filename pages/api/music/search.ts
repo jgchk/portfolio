@@ -3,7 +3,7 @@ import Promise from 'bluebird'
 
 import { first, asArray } from 'lib/array'
 import apis, { apiMap } from 'lib/api/streaming'
-import { isSearchable, isSearchType } from 'lib/api/streaming/type'
+import { isSearchable, isSearchType, Release } from 'lib/api/streaming/type'
 
 export default async (
   req: NextApiRequest,
@@ -28,12 +28,18 @@ export default async (
     const api = apiMap[s]
     if (!isSearchable(api)) return {}
     if (sources && !sources.includes(api.name.toLowerCase())) return {}
-    const results = await api.search(
-      first(title),
-      first(artist),
-      searchType,
-      parseInt(first(limit), 10) || 1
-    )
+
+    let results: Release[] = []
+    try {
+      results = await api.search(
+        first(title),
+        first(artist),
+        searchType,
+        parseInt(first(limit), 10) || 1
+      )
+    } catch (e) {
+      console.log(e)
+    }
     return { [api.name.toLowerCase()]: results }
   })
 
