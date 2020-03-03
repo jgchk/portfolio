@@ -28,13 +28,18 @@ export default async (
     const api = apiMap[s]
     if (!isSearchable(api)) return {}
     if (sources && !sources.includes(api.name.toLowerCase())) return {}
-    const results = await api.search(
-      first(title),
-      first(artist),
-      searchType,
-      parseInt(first(limit), 10) || 1
-    )
-    return { [api.name.toLowerCase()]: results }
+    try {
+      const results = await api.search(
+        first(title),
+        first(artist),
+        searchType,
+        parseInt(first(limit), 10) || 1
+      )
+      return { [api.name.toLowerCase()]: results }
+    } catch (e) {
+      console.log(e)
+      return { [api.name.toLowerCase()]: null }
+    }
   })
 
   res.status(200).json(Object.assign({}, ...responses))
