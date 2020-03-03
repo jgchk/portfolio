@@ -2,12 +2,13 @@ import Bandcamp, {
   AlbumInfo,
   SearchResult,
   AlbumResult,
+  TrackResult,
 } from 'bandcamp-scraper'
 import Promise from 'bluebird'
 
 import { sortMostSimilar } from 'lib/string'
-import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
 import { formatMilliseconds } from 'lib/time'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const BC = {
   getAlbumInfo: Promise.promisify(Bandcamp.getAlbumInfo),
@@ -69,14 +70,22 @@ function isAlbumResult(result: SearchResult): result is AlbumResult {
   return result.type === 'album'
 }
 
+function isTrackResult(result: SearchResult): result is TrackResult {
+  return result.type === 'track'
+}
+
 async function search(
   title: string,
   artist: string,
+  type: SearchType,
   limit?: number
 ): Promise<Array<Release>> {
   const query = `${title} ${artist}`
   const results = await BC.search({ query })
-  const filteredResults = results.filter(isAlbumResult)
+  const filteredResults: Array<AlbumResult | TrackResult> =
+    type === 'album'
+      ? results.filter(isAlbumResult)
+      : results.filter(isTrackResult)
   const sortedResults = sortMostSimilar(
     query,
     filteredResults,

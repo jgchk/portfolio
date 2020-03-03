@@ -1,10 +1,10 @@
-import YTSearch from 'ytsr'
+import YTSearch, { SearchResult } from 'ytsr'
 import YTInfo, { VideoInfo } from 'youtube-info'
 import getArtistTitle from 'get-artist-title'
 import Promise from 'bluebird'
 
-import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
 import { sortMostSimilar } from 'lib/string'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const regex = /(?:youtube\.com\/(?:[^/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?/\s]{11})/i
 
@@ -41,6 +41,16 @@ async function resolve(url: string): Promise<Release> {
   }
 }
 
+function formatResult(result: SearchResult): Release {
+  const title = getTitle(result.title)
+  return {
+    title,
+    format: 'digital file',
+    attributes: ['streaming'],
+    link: result.link,
+  }
+}
+
 function isRelease(release: Release | null): release is Release {
   return release !== null
 }
@@ -48,6 +58,7 @@ function isRelease(release: Release | null): release is Release {
 async function search(
   title: string,
   artist: string,
+  _type: SearchType,
   limit?: number
 ): Promise<Array<Release>> {
   const query = `${artist} ${title}`
@@ -60,14 +71,8 @@ async function search(
     item => `${item.title}`
   ).reverse()
   const limitedResults = sortedResults.slice(0, limit || sortedResults.length)
-  const promisedResults = await Promise.map(limitedResults, async result => {
-    try {
-      return await resolve(result.link)
-    } catch (e) {
-      return null
-    }
-  })
-  return promisedResults.filter(isRelease)
+  const formattedResults = limitedResults.map(formatResult)
+  return formattedResults
 }
 
 const api: Api & Searchable & Resolvable = {

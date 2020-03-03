@@ -2,9 +2,9 @@
 import SpotifyWebApi from 'spotify-web-api-node'
 import Promise from 'bluebird'
 
-import { Api, Searchable, Resolvable, Release } from 'lib/api/type'
 import { sortMostSimilar } from 'lib/string'
 import { formatMilliseconds } from 'lib/time'
+import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 
 const regex = /(((http|https):\/\/)?(open\.spotify\.com\/.*|play\.spotify\.com\/.*))(album|track)\/([a-zA-Z0-9]+)/i
 
@@ -163,22 +163,39 @@ function isAlbumSearchResponse(
   return 'albums' in searchResponse
 }
 
+function isTrackSearchResponse(
+  searchResponse: SpotifyApi.SearchResponse
+): searchResponse is SpotifyApi.TrackSearchResponse {
+  return 'tracks' in searchResponse
+}
+
 async function search(
   title: string,
   artist: string,
+  type: SearchType,
   limit?: number
 ): Promise<Array<Release>> {
   await checkAuthRefresh()
   const query = `${artist} ${title}`
-  const response = await Spotify.search(query, ['album'])
+  const response = await Spotify.search(query, [type])
 
   if (response.statusCode !== 200)
     throw new Error(`Got a bad status code: ${response.statusCode}`)
-  if (!isAlbumSearchResponse(response.body))
-    throw new Error("Got a bad response. 'albums' is not present in body")
 
-  const results = response.body.albums
-  const sortedResults = sortMostSimilar(query, results.items, item =>
+  let results: Array<
+    SpotifyApi.AlbumObjectSimplified | SpotifyApi.TrackObjectFull
+  >
+  if (isAlbumSearchResponse(response.body)) {
+    results = response.body.albums.items
+  } else if (isTrackSearchResponse(response.body)) {
+    results = response.body.tracks.items
+  } else {
+    throw new Error(
+      'Could not find "albums" or "tracks" in Spotify response body'
+    )
+  }
+
+  const sortedResults = sortMostSimilar(query, results, item =>
     [...item.artists.map(a => a.name), item.name].join(' ')
   ).reverse()
   const limitedResults = sortedResults.slice(0, limit || sortedResults.length)

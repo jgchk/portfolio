@@ -18,8 +18,18 @@ export interface Track {
   duration: string
 }
 
+export type SearchType = 'album' | 'track'
+export function isSearchType(str: string): str is SearchType {
+  return str === 'album' || str === 'track'
+}
+
 export interface Searchable {
-  search(title: string, artist: string, limit?: number): Promise<Array<Release>>
+  search(
+    title: string,
+    artist: string,
+    type: SearchType,
+    limit?: number
+  ): Promise<Array<Release>>
 }
 
 export function isSearchable(api: Api): api is Api & Searchable {

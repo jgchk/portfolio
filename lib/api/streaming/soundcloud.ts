@@ -10,6 +10,7 @@ import {
   Resolvable,
   Release,
   Track as ReleaseTrack,
+  SearchType,
 } from './type'
 
 const SC = new SoundCloud({ client_id: process.env.SOUNDCLOUD_ID || '' })
@@ -101,10 +102,16 @@ async function searchType(
 async function search(
   title: string,
   artist: string,
+  type: SearchType,
   limit?: number
 ): Promise<Array<Release>> {
-  let results = await searchType(title, artist, '/playlists')
-  if (!results) results = await searchType(title, artist, '/tracks')
+  let results
+  if (type === 'album') {
+    results = await searchType(title, artist, '/playlists')
+    if (!results) results = await searchType(title, artist, '/tracks')
+  } else {
+    results = await searchType(title, artist, '/tracks')
+  }
 
   const sortedResults = sortMostSimilar(
     `${artist} ${title}`,
