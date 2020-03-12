@@ -21,6 +21,7 @@ export interface Artist {
   name: string
   albums: Album[]
 }
+export type Library = Artist[]
 
 const Bucket = 'jake.cafe-music'
 
@@ -54,7 +55,7 @@ function trackInfo(path: string): Track | null {
   }
 }
 
-export default async function getLibrary(): Promise<Artist[]> {
+export default async function getLibrary(): Promise<Library> {
   const map: { [k: string]: { [k: string]: string[] } } = {}
 
   let continuationToken = null
