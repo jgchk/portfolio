@@ -52,7 +52,7 @@ function trackInfo(path: string): Track {
   }
 }
 
-export async function getArtistAlbumMap(): Promise<Artist[]> {
+export default async function getLibrary(): Promise<Artist[]> {
   const map = {}
 
   let continuationToken = null
