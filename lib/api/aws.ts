@@ -1,5 +1,7 @@
 import S3 from 'aws-sdk/clients/s3'
 
+import { notEmpty } from '../types'
+
 export interface Cover {
   fileType: string
   path: string
@@ -13,7 +15,7 @@ export interface Track {
 export interface Album {
   title: string
   tracks: Track[]
-  cover: Cover
+  cover: Cover | null
 }
 export interface Artist {
   name: string
@@ -53,16 +55,19 @@ function trackInfo(path: string): Track | null {
 }
 
 export default async function getLibrary(): Promise<Artist[]> {
-  const map = {}
+  const map: { [k: string]: { [k: string]: string[] } } = {}
 
   let continuationToken = null
   do {
+    const params: S3.Types.ListObjectsV2Request = { Bucket }
+    if (continuationToken !== null) params.ContinuationToken = continuationToken
+
     /* we have to await in this loop because we
      * need the continuationToken for each
      * successive call. thank the AWS API designers */
     /* eslint-disable-next-line no-await-in-loop */
-    const response = await s3
-      .listObjectsV2({ Bucket, ContinuationToken: continuationToken })
+    const response: S3.Types.ListObjectsV2Output = await s3
+      .listObjectsV2(params)
       .promise()
     continuationToken = response.NextContinuationToken
     const contents = response.Contents || []
@@ -83,8 +88,8 @@ export default async function getLibrary(): Promise<Artist[]> {
       albums: Object.entries(albums).map(([albumTitle, tracks]) => {
         const album: Album = {
           title: albumTitle,
-          tracks: tracks.map(track => trackInfo(track)).filter(info => !!info),
-          cover: tracks.map(track => getCover(track)).find(cover => !!cover),
+          tracks: tracks.map(track => trackInfo(track)).filter(notEmpty),
+          cover: tracks.map(track => getCover(track)).find(notEmpty) || null,
         }
         return album
       }),
