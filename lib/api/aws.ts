@@ -21,7 +21,9 @@ export interface Artist {
   name: string
   albums: Album[]
 }
-export type Library = Artist[]
+export interface Library {
+  artists: Artist[]
+}
 
 const Bucket = 'jake.cafe-music'
 
@@ -83,7 +85,7 @@ export default async function getLibrary(): Promise<Library> {
     })
   } while (continuationToken)
 
-  return Object.entries(map).map(([artistName, albums]) => {
+  const artists = Object.entries(map).map(([artistName, albums]) => {
     const artist: Artist = {
       name: artistName,
       albums: Object.entries(albums).map(([albumTitle, tracks]) => {
@@ -97,4 +99,6 @@ export default async function getLibrary(): Promise<Library> {
     }
     return artist
   })
+
+  return { artists }
 }
