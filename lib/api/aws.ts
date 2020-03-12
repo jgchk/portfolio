@@ -28,7 +28,7 @@ s3.config.credentials = {
   secretAccessKey: process.env.AWS_SECRET || '',
 }
 
-function getCover(path: string): Cover {
+function getCover(path: string): Cover | null {
   const [, , cover] = path.split('/')
   const regex = /(cover)\.(.+)/
   const match = regex.exec(cover)
@@ -39,7 +39,7 @@ function getCover(path: string): Cover {
   }
 }
 
-function trackInfo(path: string): Track {
+function trackInfo(path: string): Track | null {
   const [, , track] = path.split('/')
   const regex = /(\d+)\s+([^.]+)\.(.+)/
   const match = regex.exec(track)
