@@ -39,6 +39,23 @@ export async function getAlbums(artist: string): Promise<string[]> {
     .filter(notNull)
 }
 
+export interface TrackInfo {
+  num: string
+  title: string
+  fileType: string
+}
+function trackInfo(track: string): TrackInfo {
+  console.log(track)
+  const regex = /(\d+)\s+([^.]+)\.(.+)/
+  const match = regex.exec(track)
+  if (!match) return null
+  return {
+    num: match[1],
+    title: match[2],
+    fileType: match[3],
+  }
+}
+
 export type ArtistAlbumMap = Record<string, AlbumTrackMap>
 export type AlbumTrackMap = Record<string, string[]>
 export async function getArtistAlbumMap(): Promise<ArtistAlbumMap> {
@@ -61,8 +78,11 @@ export async function getArtistAlbumMap(): Promise<ArtistAlbumMap> {
       const [artist, album, track] = obj.Key.split('/')
       const albumTrackMap = map[artist] || {}
       const tracks = albumTrackMap[album] || []
-      albumTrackMap[album] = tracks.concat(track)
-      map[artist] = albumTrackMap
+      const info = trackInfo(track)
+      if (info) {
+        albumTrackMap[album] = tracks.concat(info.title)
+        map[artist] = albumTrackMap
+      }
     })
   } while (continuationToken)
 
