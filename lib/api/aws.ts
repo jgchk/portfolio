@@ -42,17 +42,29 @@ export async function getAlbums(artist: string): Promise<string[]> {
 export type ArtistAlbumMap = Record<string, AlbumTrackMap>
 export type AlbumTrackMap = Record<string, string[]>
 export async function getArtistAlbumMap(): Promise<ArtistAlbumMap> {
-  const response = await s3.listObjectsV2({ Bucket }).promise()
-  const contents = response.Contents || []
-
   const map: ArtistAlbumMap = {}
-  contents.forEach(obj => {
-    if (!obj.Key) return
-    const [artist, album, track] = obj.Key.split('/')
-    const albumTrackMap = map[artist] || {}
-    const tracks = albumTrackMap[album] || []
-    albumTrackMap[album] = tracks.concat(track)
-    map[artist] = albumTrackMap
-  })
+
+  let continuationToken = null
+  do {
+    /* we have to await in this loop because we
+     * need the continuationToken for each
+     * successive call. thank the AWS API designers */
+    /* eslint-disable-next-line no-await-in-loop */
+    const response = await s3
+      .listObjectsV2({ Bucket, ContinuationToken: continuationToken })
+      .promise()
+    continuationToken = response.NextContinuationToken
+    const contents = response.Contents || []
+
+    contents.forEach(obj => {
+      if (!obj.Key) return
+      const [artist, album, track] = obj.Key.split('/')
+      const albumTrackMap = map[artist] || {}
+      const tracks = albumTrackMap[album] || []
+      albumTrackMap[album] = tracks.concat(track)
+      map[artist] = albumTrackMap
+    })
+  } while (continuationToken)
+
   return map
 }
