@@ -1,5 +1,25 @@
 import S3 from 'aws-sdk/clients/s3'
 
+export interface Cover {
+  fileType: string
+  path: string
+}
+export interface Track {
+  num: string
+  title: string
+  fileType: string
+  path: string
+}
+export interface Album {
+  title: string
+  tracks: Track[]
+  cover: Cover
+}
+export interface Artist {
+  name: string
+  albums: Album[]
+}
+
 const Bucket = 'jake.cafe-music'
 
 const s3 = new S3({ apiVersion: '2006-03-01' })
@@ -8,44 +28,19 @@ s3.config.credentials = {
   secretAccessKey: process.env.AWS_SECRET || '',
 }
 
-function notNull(str: string | null): str is string {
-  return !!str
+function getCover(path: string): Cover {
+  const [, , cover] = path.split('/')
+  const regex = /(cover)\.(.+)/
+  const match = regex.exec(cover)
+  if (!match) return null
+  return {
+    fileType: match[2],
+    path,
+  }
 }
 
-export async function getArtists(): Promise<string[]> {
-  const response = await s3.listObjectsV2({ Bucket, Delimiter: '/' }).promise()
-  const contents = response.CommonPrefixes || []
-  return contents
-    .map(prefixObj => {
-      const prefix = prefixObj.Prefix
-      if (!prefix) return null
-      return prefix.substring(0, prefix.length - 1)
-    })
-    .filter(notNull)
-}
-
-export async function getAlbums(artist: string): Promise<string[]> {
-  const Prefix = `${artist}/`
-  const response = await s3
-    .listObjectsV2({ Bucket, Delimiter: '/', Prefix })
-    .promise()
-  const contents = response.CommonPrefixes || []
-  return contents
-    .map(prefixObj => {
-      const prefix = prefixObj.Prefix
-      if (!prefix) return null
-      return prefix.substring(Prefix.length, prefix.length - 1)
-    })
-    .filter(notNull)
-}
-
-export interface TrackInfo {
-  num: string
-  title: string
-  fileType: string
-}
-function trackInfo(track: string): TrackInfo {
-  console.log(track)
+function trackInfo(path: string): Track {
+  const [, , track] = path.split('/')
   const regex = /(\d+)\s+([^.]+)\.(.+)/
   const match = regex.exec(track)
   if (!match) return null
@@ -53,13 +48,12 @@ function trackInfo(track: string): TrackInfo {
     num: match[1],
     title: match[2],
     fileType: match[3],
+    path,
   }
 }
 
-export type ArtistAlbumMap = Record<string, AlbumTrackMap>
-export type AlbumTrackMap = Record<string, string[]>
-export async function getArtistAlbumMap(): Promise<ArtistAlbumMap> {
-  const map: ArtistAlbumMap = {}
+export async function getArtistAlbumMap(): Promise<Artist[]> {
+  const map = {}
 
   let continuationToken = null
   do {
@@ -75,16 +69,26 @@ export async function getArtistAlbumMap(): Promise<ArtistAlbumMap> {
 
     contents.forEach(obj => {
       if (!obj.Key) return
-      const [artist, album, track] = obj.Key.split('/')
+      const [artist, album] = obj.Key.split('/')
       const albumTrackMap = map[artist] || {}
       const tracks = albumTrackMap[album] || []
-      const info = trackInfo(track)
-      if (info) {
-        albumTrackMap[album] = tracks.concat(info.title)
-        map[artist] = albumTrackMap
-      }
+      albumTrackMap[album] = tracks.concat(obj.Key)
+      map[artist] = albumTrackMap
     })
   } while (continuationToken)
 
-  return map
+  return Object.entries(map).map(([artistName, albums]) => {
+    const artist: Artist = {
+      name: artistName,
+      albums: Object.entries(albums).map(([albumTitle, tracks]) => {
+        const album: Album = {
+          title: albumTitle,
+          tracks: tracks.map(track => trackInfo(track)).filter(info => !!info),
+          cover: tracks.map(track => getCover(track)).find(cover => !!cover),
+        }
+        return album
+      }),
+    }
+    return artist
+  })
 }
