@@ -9,10 +9,12 @@ type TracksTabProps = {
 }
 
 const TracksTab: FunctionComponent<TracksTabProps> = ({ tracks }) => (
-  <div className={styles.container}>
-    {tracks.map(track => (
-      <TrackButton key={track.id} track={track} />
-    ))}
+  <div className={styles.scroll}>
+    <div className={styles.container}>
+      {tracks.map(track => (
+        <TrackButton key={track.id} track={track} />
+      ))}
+    </div>
   </div>
 )
 
