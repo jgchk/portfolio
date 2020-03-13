@@ -1,5 +1,6 @@
 import S3 from 'aws-sdk/clients/s3'
 import nanoid from 'nanoid'
+import NodeCache from 'node-cache'
 
 import { notEmpty } from '../types'
 
@@ -30,8 +31,11 @@ export interface Library {
   artists: Artist[]
 }
 
-const Bucket = 'jake.cafe-music'
+const oneDay = 24 * 60 * 60
+const cache = new NodeCache({ stdTTL: oneDay })
+const libraryKey = 'library'
 
+const Bucket = 'jake.cafe-music'
 const s3 = new S3({ apiVersion: '2006-03-01' })
 s3.config.credentials = {
   accessKeyId: process.env.AWS_ID || '',
@@ -65,6 +69,13 @@ function trackInfo(path: string): Track | null {
 }
 
 export default async function getLibrary(): Promise<Library> {
+  const cachedLibrary: Library | undefined = cache.get(libraryKey)
+  if (cachedLibrary) {
+    console.log('using cached library...')
+    return cachedLibrary
+  }
+  console.log('retrieving new library...')
+
   const map: { [k: string]: { [k: string]: string[] } } = {}
 
   let continuationToken = null
@@ -109,5 +120,7 @@ export default async function getLibrary(): Promise<Library> {
     return artist
   })
 
-  return { artists }
+  const library: Library = { artists }
+  cache.set(libraryKey, library)
+  return library
 }
