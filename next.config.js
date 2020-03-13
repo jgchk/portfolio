@@ -16,6 +16,9 @@ const dirs = readdirSync(__dirname, { withFileTypes: true })
 
 module.exports = withLess({
   cssModules: true,
+  cssLoaderOptions: {
+    camelCase: true,
+  },
   webpack(config) {
     dirs.forEach(dir => {
       // eslint-disable-next-line no-param-reassign

@@ -1,5 +1,7 @@
 import React, { FunctionComponent, ReactElement } from 'react'
-import { Tab as ReactTab, Tabs, TabList, TabPanel } from 'react-tabs'
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
+
+import styles from './styles.less'
 
 export interface TabElement {
   title: string
@@ -11,14 +13,22 @@ type TabLayoutProps = {
 }
 
 const TabLayout: FunctionComponent<TabLayoutProps> = ({ tabs }) => (
-  <Tabs>
-    <TabList>
+  <Tabs className={styles.tabs}>
+    <TabList className={styles.tabList}>
       {tabs.map(tab => (
-        <ReactTab key={`tab-${tab.title}`}>{tab.title}</ReactTab>
+        <Tab
+          className={styles.tab}
+          selectedClassName={styles.selected}
+          key={`tab-${tab.title}`}
+        >
+          {tab.title}
+        </Tab>
       ))}
     </TabList>
     {tabs.map(tab => (
-      <TabPanel key={`panel-${tab.title}`}>{tab.element}</TabPanel>
+      <TabPanel className={styles.tabPanel} key={`panel-${tab.title}`}>
+        {tab.element}
+      </TabPanel>
     ))}
   </Tabs>
 )
