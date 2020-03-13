@@ -5,6 +5,7 @@ import React, {
   useState,
   useMemo,
   useEffect,
+  useLayoutEffect,
 } from 'react'
 import clsx from 'clsx'
 
@@ -82,7 +83,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
 
   const [showExpanded, setShowExpanded] = useState(false)
   const [expansionStyle, setExpansionStyle] = useState(expansionOffset)
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (expanded) setExpansionStyle(expansionOffset)
   }, [expanded, expansionOffset])
   useEffect(() => {
