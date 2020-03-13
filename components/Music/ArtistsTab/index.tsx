@@ -84,7 +84,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
           artist={artist}
           expanded={false}
           getExpansionOffset={undefined}
-          onClick={(): void => onClick(artist.id)}
+          onClick={onClick}
         />
       )
     })
