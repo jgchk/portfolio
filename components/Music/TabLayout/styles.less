@@ -2,11 +2,15 @@
 @import '../../../styles/fonts.less';
 
 .tabs {
+  display: flex;
+
   position: absolute;
   top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
+
+  flex-direction: column;
 
   background-color: @background;
 }
@@ -14,26 +18,33 @@
 .tab-list {
   margin: 0;
   padding: 0;
-
-  list-style-type: none;
-
   border-bottom: 1px solid @lightBackground;
+  list-style-type: none;
 }
 
 .tab {
   display: inline-block;
+
   padding: 4px 8px;
 
   color: @darkForeground;
-  font-family: @RobotoSlab;
   font-weight: bold;
   font-size: large;
+  font-family: @RobotoSlab;
 
   cursor: pointer;
+}
+
+.tab:focus {
+  outline: 1px solid @foreground;
 }
 
 .tab.selected {
   color: @foreground;
   background-color: @lightBackground;
   cursor: default;
+}
+
+.tabPanel {
+  overflow: auto;
 }
