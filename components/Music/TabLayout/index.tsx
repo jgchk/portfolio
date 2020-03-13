@@ -27,13 +27,13 @@ const TabLayout: FunctionComponent<TabLayoutProps> = ({ tabs }) => {
           </Tab>
         ))}
       </TabList>
-      <div className={styles.tabPanelContainer}>
-        {tabs.map(tab => (
+      {tabs.map(tab => (
+        <div className={styles.tabPanelContainer}>
           <TabPanel className={styles.tabPanel} key={`panel-${tab.id}`}>
             {tab.panel}
           </TabPanel>
-        ))}
-      </div>
+        </div>
+      ))}
     </Tabs>
   )
 }

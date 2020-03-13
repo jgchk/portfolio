@@ -8,12 +8,16 @@ type AlbumsTabProps = {
   albums: Album[]
 }
 
-const AlbumsTab: FunctionComponent<AlbumsTabProps> = ({ albums }) => (
-  <div className={styles.container}>
-    {albums.map(album => (
-      <AlbumButton key={album.id} album={album} />
-    ))}
-  </div>
-)
+const AlbumsTab: FunctionComponent<AlbumsTabProps> = ({ albums }) => {
+  return (
+    <div className={styles.scroll}>
+      <div className={styles.container}>
+        {albums.map(album => (
+          <AlbumButton key={album.id} album={album} />
+        ))}
+      </div>
+    </div>
+  )
+}
 
 export default AlbumsTab
