@@ -16,7 +16,7 @@ import styles from './styles.less'
 type ArtistButtonProps = {
   artist: Artist
   expanded: boolean
-  onClick: () => void
+  onClick: (id: string) => void
   getExpansionOffset?: (
     numAlbums: number,
     dims: { left: number; top: number; width: number; height: number }
@@ -35,6 +35,11 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
   onClick,
   getExpansionOffset,
 }) => {
+  const onClickWrapper = useCallback(() => onClick(artist.id), [
+    artist.id,
+    onClick,
+  ])
+
   const buttonRef = useRef<HTMLButtonElement>(null)
   const getDimensions = useCallback(() => {
     const button = buttonRef.current
@@ -112,7 +117,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
     >
       <button
         className={styles.button}
-        onClick={onClick}
+        onClick={onClickWrapper}
         ref={buttonRef}
         type='button'
       >
