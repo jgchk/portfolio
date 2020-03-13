@@ -4,6 +4,7 @@ import React, {
   useState,
   useRef,
   useMemo,
+  useEffect,
 } from 'react'
 
 import useScrollPosition from '../../../hooks/useScrollPosition'
@@ -71,7 +72,11 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
     [dimensions, scrollPos.y]
   )
 
+  const [show, setShow] = useState(false)
+  useEffect(() => setShow(true), [])
+
   const buttons = useMemo(() => {
+    if (!show) return []
     return artists.map(artist => {
       return (
         <ArtistButton
@@ -83,7 +88,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
         />
       )
     })
-  }, [artists, onClick])
+  }, [artists, onClick, show])
 
   const buttonsWithExpanded = useMemo(() => {
     return buttons.map(button => {
