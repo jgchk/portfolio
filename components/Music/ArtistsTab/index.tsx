@@ -1,10 +1,4 @@
-import React, {
-  FunctionComponent,
-  useCallback,
-  useState,
-  useEffect,
-  useRef,
-} from 'react'
+import React, { FunctionComponent, useCallback, useState, useRef } from 'react'
 
 import ArtistButton from '../ArtistButton'
 import { Artist } from '../../../lib/api/aws'
@@ -12,9 +6,15 @@ import styles from './styles.less'
 
 type ArtistsTabProps = {
   artists: Artist[]
+  dimensions: { width: number }
+  scrollPosition: { y: number }
 }
 
-const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
+const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({
+  artists,
+  dimensions,
+  scrollPosition,
+}) => {
   const [expanded, setExpanded] = useState<string | null>(null)
   const onClick = useCallback(
     id => {
@@ -24,28 +24,16 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
     [expanded]
   )
 
-  const ref = useRef<HTMLDivElement>(null)
-  const getWidth = useCallback(() => {
-    const el = ref.current
-    return el ? el.offsetWidth : 0
-  }, [])
-  const [width, setWidth] = useState(getWidth())
-  useEffect(() => {
-    const updateWidth = (): void => setWidth(getWidth())
-    window.addEventListener('resize', updateWidth)
-    updateWidth()
-    return (): void => window.removeEventListener('resize', updateWidth)
-  })
-
   return (
-    <div className={styles.container} ref={ref}>
+    <div className={styles.container}>
       {artists.map(artist => (
         <ArtistButton
           key={artist.id}
           artist={artist}
           expanded={expanded === artist.id}
           onClick={(): void => onClick(artist.id)}
-          windowWidth={width}
+          windowWidth={dimensions.width}
+          scrollPosition={scrollPosition.y}
         />
       ))}
     </div>

@@ -16,6 +16,7 @@ type ArtistButtonProps = {
   expanded: boolean
   onClick: () => void
   windowWidth: number
+  scrollPosition: number
 }
 
 const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
@@ -23,6 +24,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
   expanded,
   onClick,
   windowWidth,
+  scrollPosition,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const getDimensions = useCallback(() => {
@@ -54,7 +56,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
     const maxLeft = albumsLeft - rightOvershoot
 
     const leftOffset = rightOvershoot > 0 ? maxLeft : Math.max(4, albumsLeft)
-    const topOffset = dimensions.top + dimensions.height + 4
+    const topOffset = dimensions.top + dimensions.height + 4 - scrollPosition
 
     return {
       left: leftOffset,
@@ -68,6 +70,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
     dimensions.left,
     dimensions.top,
     dimensions.width,
+    scrollPosition,
     windowWidth,
   ])
 
