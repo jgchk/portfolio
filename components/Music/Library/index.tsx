@@ -1,10 +1,11 @@
 import React, { FunctionComponent } from 'react'
 
-import TabLayout from './TabLayout'
-import ArtistsTab from './ArtistsTab'
-import AlbumsTab from './AlbumsTab'
-import TracksTab from './TracksTab'
-import { Library } from '../../lib/api/aws'
+import { Library } from '../../../lib/api/aws'
+
+import TabLayout from '../TabLayout'
+import ArtistsTab from '../ArtistsTab'
+import AlbumsTab from '../AlbumsTab'
+import TracksTab from '../TracksTab'
 
 type MusicProps = {
   library: Library

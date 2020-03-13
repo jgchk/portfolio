@@ -18,11 +18,15 @@
 }
 
 .tab-list {
+  display: flex;
+
   z-index: 10;
 
   margin: 0;
 
   padding: 0;
+
+  flex-direction: row;
 
   background-color: @background;
 
@@ -34,9 +38,11 @@
 }
 
 .tab {
-  display: inline-block;
+  display: flex;
 
   padding: 4px 8px;
+
+  fill: @darkForeground;
 
   color: @darkForeground;
   font-weight: bold;
@@ -44,16 +50,17 @@
   font-family: @RobotoSlab;
 
   cursor: pointer;
-}
 
-.tab:focus {
-  outline: 1px solid @foreground;
-}
+  &:focus {
+    outline: 1px solid @foreground;
+  }
 
-.tab.selected {
-  color: @foreground;
-  background-color: @lightBackground;
-  cursor: default;
+  &.selected {
+    fill: @foreground;
+    color: @foreground;
+    background-color: @lightBackground;
+    cursor: default;
+  }
 }
 
 .tab-panel-container {

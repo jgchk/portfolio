@@ -1,15 +1,15 @@
 import React from 'react'
 import { NextPage } from 'next'
 
-import MusicComponent from '../components/Music'
-import getLibrary, { Library } from '../lib/api/aws'
+import Library from '../components/Music/Library'
+import getLibrary, { Library as LibraryModel } from '../lib/api/aws'
 
 type MusicProps = {
-  library: Library
+  library: LibraryModel
 }
 
 const Music: NextPage<MusicProps> = ({ library }) => (
-  <MusicComponent library={library} />
+  <Library library={library} />
 )
 
 Music.getInitialProps = async (): Promise<MusicProps> => {
