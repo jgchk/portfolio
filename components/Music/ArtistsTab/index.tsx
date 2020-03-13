@@ -59,7 +59,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
       const maxLeft = albumsLeft - rightOvershoot
 
       const leftOffset = rightOvershoot > 0 ? maxLeft : Math.max(4, albumsLeft)
-      const topOffset = dims.top + dims.height + 4
+      const topOffset = dims.top + dims.height + 4 - scrollPos.y
 
       return {
         left: leftOffset,
@@ -69,7 +69,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
         height: albumsHeight,
       }
     },
-    [dimensions]
+    [dimensions, scrollPos.y]
   )
 
   const [show, setShow] = useState(false)
