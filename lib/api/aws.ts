@@ -60,7 +60,7 @@ function getCover(path: string): Cover | null {
 
 function trackInfo(path: string): Track | null {
   const [, , track] = path.split('/')
-  const regex = /(\d+)\s+([^.]+)\.(.+)/
+  const regex = /(\d+)\s+(.+)\.(.+(?!\.)+)+$/
   const match = regex.exec(track)
   if (!match) return null
   return {
