@@ -10,7 +10,7 @@ type ArtistsTabProps = {
 const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => (
   <div>
     {artists.map(artist => (
-      <ArtistButton artist={artist} />
+      <ArtistButton key={artist.id} artist={artist} />
     ))}
   </div>
 )

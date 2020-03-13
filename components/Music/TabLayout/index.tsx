@@ -14,11 +14,11 @@ const TabLayout: FunctionComponent<TabLayoutProps> = ({ tabs }) => (
   <Tabs>
     <TabList>
       {tabs.map(tab => (
-        <ReactTab>{tab.title}</ReactTab>
+        <ReactTab key={`tab-${tab.title}`}>{tab.title}</ReactTab>
       ))}
     </TabList>
     {tabs.map(tab => (
-      <TabPanel>{tab.element}</TabPanel>
+      <TabPanel key={`panel-${tab.title}`}>{tab.element}</TabPanel>
     ))}
   </Tabs>
 )

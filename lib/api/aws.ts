@@ -1,23 +1,28 @@
 import S3 from 'aws-sdk/clients/s3'
+import nanoid from 'nanoid'
 
 import { notEmpty } from '../types'
 
 export interface Cover {
+  id: string
   fileType: string
   path: string
 }
 export interface Track {
+  id: string
   num: string
   title: string
   fileType: string
   path: string
 }
 export interface Album {
+  id: string
   title: string
   tracks: Track[]
   cover: Cover | null
 }
 export interface Artist {
+  id: string
   name: string
   albums: Album[]
 }
@@ -39,6 +44,7 @@ function getCover(path: string): Cover | null {
   const match = regex.exec(cover)
   if (!match) return null
   return {
+    id: nanoid(),
     fileType: match[2],
     path,
   }
@@ -50,6 +56,7 @@ function trackInfo(path: string): Track | null {
   const match = regex.exec(track)
   if (!match) return null
   return {
+    id: nanoid(),
     num: match[1],
     title: match[2],
     fileType: match[3],
@@ -87,9 +94,11 @@ export default async function getLibrary(): Promise<Library> {
 
   const artists = Object.entries(map).map(([artistName, albums]) => {
     const artist: Artist = {
+      id: nanoid(),
       name: artistName,
       albums: Object.entries(albums).map(([albumTitle, tracks]) => {
         const album: Album = {
+          id: nanoid(),
           title: albumTitle,
           tracks: tracks.map(track => trackInfo(track)).filter(notEmpty),
           cover: tracks.map(track => getCover(track)).find(notEmpty) || null,

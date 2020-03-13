@@ -10,7 +10,7 @@ type AlbumsTabProps = {
 const AlbumsTab: FunctionComponent<AlbumsTabProps> = ({ albums }) => (
   <div>
     {albums.map(album => (
-      <AlbumButton album={album} />
+      <AlbumButton key={album.id} album={album} />
     ))}
   </div>
 )

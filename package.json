@@ -25,6 +25,7 @@
     "dotenv": "^8.2.0",
     "get-artist-title": "jgchk/get-artist-title",
     "less": "^3.11.1",
+    "nanoid": "^2.1.11",
     "next": "^9.2.1",
     "node-fetch": "^2.6.0",
     "react": "^16.12.0",
@@ -40,6 +41,7 @@
   "devDependencies": {
     "@types/bluebird": "^3.5.29",
     "@types/classnames": "^2.2.9",
+    "@types/nanoid": "^2.1.0",
     "@types/node": "^13.7.1",
     "@types/node-fetch": "^2.5.4",
     "@types/react": "^16.9.19",
