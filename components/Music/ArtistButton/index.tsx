@@ -122,6 +122,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
         <div className={styles.expansion} style={expansionStyle}>
           {artist.albums.map(album => (
             <AlbumButton
+              key={album.id}
               album={album}
               className={clsx(
                 styles.album,
