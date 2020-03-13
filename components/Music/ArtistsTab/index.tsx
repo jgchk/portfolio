@@ -59,7 +59,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
       const maxLeft = albumsLeft - rightOvershoot
 
       const leftOffset = rightOvershoot > 0 ? maxLeft : Math.max(4, albumsLeft)
-      const topOffset = dims.top + dims.height + 4 - scrollPos.y
+      const topOffset = dims.top + dims.height + 4
 
       return {
         left: leftOffset,
@@ -69,7 +69,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
         height: albumsHeight,
       }
     },
-    [dimensions, scrollPos]
+    [dimensions]
   )
 
   const [show, setShow] = useState(false)
@@ -96,10 +96,11 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
         return React.cloneElement(button, {
           expanded: true,
           getExpansionOffset,
+          scrollPos,
         })
       return button
     })
-  }, [buttons, expanded, getExpansionOffset])
+  }, [buttons, expanded, getExpansionOffset, scrollPos])
 
   return (
     <div className={styles.scroll} ref={scrollRef}>

@@ -9,7 +9,6 @@ import React, {
 } from 'react'
 import clsx from 'clsx'
 
-import useDimensions from '../../../hooks/useDimensions'
 import { Artist } from '../../../lib/api/aws'
 import AlbumButton from '../AlbumButton'
 import styles from './styles.less'
@@ -21,13 +20,16 @@ type ArtistButtonProps = {
   getExpansionOffset?: (
     numAlbums: number,
     dims: { left: number; top: number; width: number; height: number }
-  ) => {
-    left: number
-    top: number
-    width: number
-    maxWidth: number
-    height: number
-  }
+  ) => ExpansionOffset
+  scrollPos?: { x: number; y: number }
+}
+
+export interface ExpansionOffset {
+  left: number
+  top: number
+  width: number
+  maxWidth: number
+  height: number
 }
 
 const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
@@ -35,37 +37,62 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
   expanded,
   onClick,
   getExpansionOffset,
+  scrollPos,
 }) => {
+  const [localScrollPos, setScrollPos] = useState(scrollPos)
+  useEffect(() => {
+    if (localScrollPos !== scrollPos) setScrollPos(scrollPos)
+  }, [localScrollPos, scrollPos])
+
   const onClickWrapper = useCallback(() => onClick(artist.id), [
     artist.id,
     onClick,
   ])
 
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const dimensions = useDimensions(buttonRef, false)
+  const getDimensions = useCallback(scrPos => {
+    if (!buttonRef.current)
+      return {
+        top: 0,
+        bottom: 0,
+        left: 0,
+        right: 0,
+        width: 0,
+        height: 0,
+      }
+    return buttonRef.current.getBoundingClientRect()
+  }, [])
+  const getExpansionsOffsetWrapper = useCallback(
+    () =>
+      getExpansionOffset
+        ? getExpansionOffset(artist.albums.length, getDimensions(scrollPos))
+        : {
+            left: 0,
+            top: 0,
+            width: 0,
+            maxWidth: 0,
+            height: 0,
+          },
+    [artist.albums.length, getDimensions, getExpansionOffset, scrollPos]
+  )
+  const [expansionOffset, setExpansionOffset] = useState(
+    getExpansionsOffsetWrapper()
+  )
+  useLayoutEffect(() => {
+    if (expanded) setExpansionOffset(getExpansionsOffsetWrapper())
+  }, [expanded, getExpansionsOffsetWrapper])
 
   const [transitioning, setTransitioning] = useState(false)
   const [animating, setAnimating] = useState(false)
   const [localExpanded, setLocalExpanded] = useState(expanded)
   useEffect(() => {
     if (localExpanded !== expanded) {
+      setExpansionOffset(getExpansionsOffsetWrapper())
       setTransitioning(true)
       setAnimating(true)
     }
     setLocalExpanded(expanded)
-  }, [expanded, localExpanded])
-
-  const expansionOffset = useMemo(() => {
-    return getExpansionOffset
-      ? getExpansionOffset(artist.albums.length, dimensions)
-      : {
-          left: 0,
-          top: 0,
-          width: 0,
-          maxWidth: 0,
-          height: 0,
-        }
-  }, [artist.albums.length, dimensions, getExpansionOffset])
+  }, [expanded, getExpansionsOffsetWrapper, localExpanded])
 
   const [transitionStep, setTransitionStep] = useState(0)
   useEffect(() => {
