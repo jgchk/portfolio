@@ -34,7 +34,6 @@ const Music: FunctionComponent<MusicProps> = ({ library }) => {
   }
 
   const tabs = [artistsTab, albumsTab, tracksTab]
-  console.log('tabs', tabs)
   return <TabLayout tabs={tabs} />
 }
 
