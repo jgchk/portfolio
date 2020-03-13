@@ -1,11 +1,12 @@
-import React, { FunctionComponent, ReactElement } from 'react'
+import React, { FunctionComponent, ReactNode } from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
 import styles from './styles.less'
 
 export interface TabElement {
-  title: string
-  element: ReactElement
+  id: string
+  tab: ReactNode
+  panel: ReactNode
 }
 
 type TabLayoutProps = {
@@ -20,16 +21,16 @@ const TabLayout: FunctionComponent<TabLayoutProps> = ({ tabs }) => {
           <Tab
             className={styles.tab}
             selectedClassName={styles.selected}
-            key={`tab-${tab.title}`}
+            key={`tab-${tab.id}`}
           >
-            {tab.title}
+            {tab.tab}
           </Tab>
         ))}
       </TabList>
       <div className={styles.tabPanelContainer}>
         {tabs.map(tab => (
-          <TabPanel className={styles.tabPanel} key={`panel-${tab.title}`}>
-            {tab.element}
+          <TabPanel className={styles.tabPanel} key={`panel-${tab.id}`}>
+            {tab.panel}
           </TabPanel>
         ))}
       </div>

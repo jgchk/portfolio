@@ -13,20 +13,23 @@ type MusicProps = {
 const Music: FunctionComponent<MusicProps> = ({ library }) => {
   const { artists } = library
   const artistsTab = {
-    title: 'Artists',
-    element: <ArtistsTab artists={artists} />,
+    id: 'artists',
+    tab: 'Artists',
+    panel: <ArtistsTab artists={artists} />,
   }
 
   const albums = artists.flatMap(artist => artist.albums)
   const albumsTab = {
-    title: 'Albums',
-    element: <AlbumsTab albums={albums} />,
+    id: 'albums',
+    tab: 'Albums',
+    panel: <AlbumsTab albums={albums} />,
   }
 
   const tracks = albums.flatMap(album => album.tracks)
   const tracksTab = {
-    title: 'Tracks',
-    element: <TracksTab tracks={tracks} />,
+    id: 'tracks',
+    tab: 'Tracks',
+    panel: <TracksTab tracks={tracks} />,
   }
 
   const tabs = [artistsTab, albumsTab, tracksTab]
