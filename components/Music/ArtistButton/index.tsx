@@ -56,19 +56,17 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
     setLocalExpanded(expanded)
   }, [expanded, localExpanded])
 
-  const getExpansionOffsetWrapper = useCallback(
-    () =>
-      getExpansionOffset
-        ? getExpansionOffset(artist.albums.length, getDimensions())
-        : {
-            left: 0,
-            top: 0,
-            width: 0,
-            maxWidth: 0,
-            height: 0,
-          },
-    [artist.albums.length, getDimensions, getExpansionOffset]
-  )
+  const expansionOffset = useMemo(() => {
+    return getExpansionOffset
+      ? getExpansionOffset(artist.albums.length, getDimensions())
+      : {
+          left: 0,
+          top: 0,
+          width: 0,
+          maxWidth: 0,
+          height: 0,
+        }
+  }, [artist.albums.length, getDimensions, getExpansionOffset])
 
   const [transitionStep, setTransitionStep] = useState(0)
   useEffect(() => {
@@ -82,24 +80,25 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
       setTransitionStep(0)
   }, [animating, transitionStep, transitioning])
 
-  const [expansionOffset, setExpansionOffset] = useState(
-    getExpansionOffsetWrapper()
-  )
   const [showExpanded, setShowExpanded] = useState(false)
+  const [expansionStyle, setExpansionStyle] = useState(expansionOffset)
   useEffect(() => {
     if (
       (expanded && transitionStep === 1) ||
       (!expanded && transitionStep === 3)
     ) {
-      setExpansionOffset(getExpansionOffsetWrapper())
       setShowExpanded(expanded)
+      setExpansionStyle(expansionOffset)
     }
-  }, [expanded, getExpansionOffsetWrapper, transitionStep])
+  }, [expanded, expansionOffset, transitionStep])
 
-  const marginBottom = useMemo(
-    () => (expanded ? expansionOffset.height : 0) + 4,
-    [expanded, expansionOffset.height]
-  )
+  const height = useMemo(() => (showExpanded ? expansionOffset.height : 0), [
+    expansionOffset.height,
+    showExpanded,
+  ])
+  const marginBottom = useMemo(() => {
+    return height + 4
+  }, [height])
 
   return (
     <div
@@ -116,7 +115,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
         {artist.name}
       </button>
       {showExpanded && (
-        <div className={styles.expansion} style={expansionOffset}>
+        <div className={styles.expansion} style={expansionStyle}>
           {artist.albums.map(album => (
             <AlbumButton
               album={album}
