@@ -83,6 +83,9 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
   const [showExpanded, setShowExpanded] = useState(false)
   const [expansionStyle, setExpansionStyle] = useState(expansionOffset)
   useEffect(() => {
+    if (expanded) setExpansionStyle(expansionOffset)
+  }, [expanded, expansionOffset])
+  useEffect(() => {
     if (
       (expanded && transitionStep === 1) ||
       (!expanded && transitionStep === 3)
