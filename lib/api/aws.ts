@@ -7,14 +7,14 @@ import { notEmpty } from '../types'
 export interface Cover {
   id: string
   fileType: string
-  path: string
+  url: string
 }
 export interface Track {
   id: string
   num: string
   title: string
   fileType: string
-  path: string
+  url: string
 }
 export interface Album {
   id: string
@@ -36,10 +36,14 @@ const cache = new NodeCache({ stdTTL: oneDay })
 const libraryKey = 'library'
 
 const Bucket = 'jake.cafe-music'
-const s3 = new S3({ apiVersion: '2006-03-01' })
-s3.config.credentials = {
+const s3 = new S3({
+  apiVersion: '2006-03-01',
   accessKeyId: process.env.AWS_ID || '',
   secretAccessKey: process.env.AWS_SECRET || '',
+})
+
+function makeUrl(path: string): string {
+  return s3.getSignedUrl('getObject', { Bucket, Key: path })
 }
 
 function getCover(path: string): Cover | null {
@@ -50,7 +54,7 @@ function getCover(path: string): Cover | null {
   return {
     id: nanoid(),
     fileType: match[2],
-    path,
+    url: makeUrl(path),
   }
 }
 
@@ -64,7 +68,7 @@ function trackInfo(path: string): Track | null {
     num: match[1],
     title: match[2],
     fileType: match[3],
-    path,
+    url: makeUrl(path),
   }
 }
 
