@@ -18,9 +18,18 @@
 }
 
 .tab-list {
+  z-index: 10;
+
   margin: 0;
+
   padding: 0;
+
+  background-color: @background;
+
   border-bottom: 1px solid @lightBackground;
+
+  box-shadow: 0 0 4px 4px fade(black, 10%);
+
   list-style-type: none;
 }
 
@@ -31,7 +40,7 @@
 
   color: @darkForeground;
   font-weight: bold;
-  font-size: large;
+  font-size: x-large;
   font-family: @RobotoSlab;
 
   cursor: pointer;
