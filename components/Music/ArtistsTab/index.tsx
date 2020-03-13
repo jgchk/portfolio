@@ -69,7 +69,7 @@ const ArtistsTab: FunctionComponent<ArtistsTabProps> = ({ artists }) => {
         height: albumsHeight,
       }
     },
-    [dimensions, scrollPos.y]
+    [dimensions, scrollPos]
   )
 
   const [show, setShow] = useState(false)

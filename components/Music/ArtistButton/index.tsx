@@ -9,6 +9,7 @@ import React, {
 } from 'react'
 import clsx from 'clsx'
 
+import useDimensions from '../../../hooks/useDimensions'
 import { Artist } from '../../../lib/api/aws'
 import AlbumButton from '../AlbumButton'
 import styles from './styles.less'
@@ -41,15 +42,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
   ])
 
   const buttonRef = useRef<HTMLButtonElement>(null)
-  const getDimensions = useCallback(() => {
-    const button = buttonRef.current
-    return {
-      left: button ? button.offsetLeft : 0,
-      top: button ? button.offsetTop : 0,
-      width: button ? button.offsetWidth : 0,
-      height: button ? button.offsetHeight : 0,
-    }
-  }, [])
+  const dimensions = useDimensions(buttonRef, false)
 
   const [transitioning, setTransitioning] = useState(false)
   const [animating, setAnimating] = useState(false)
@@ -64,7 +57,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
 
   const expansionOffset = useMemo(() => {
     return getExpansionOffset
-      ? getExpansionOffset(artist.albums.length, getDimensions())
+      ? getExpansionOffset(artist.albums.length, dimensions)
       : {
           left: 0,
           top: 0,
@@ -72,7 +65,7 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
           maxWidth: 0,
           height: 0,
         }
-  }, [artist.albums.length, getDimensions, getExpansionOffset])
+  }, [artist.albums.length, dimensions, getExpansionOffset])
 
   const [transitionStep, setTransitionStep] = useState(0)
   useEffect(() => {

@@ -2,32 +2,35 @@ import { useEffect, RefObject, useState } from 'react'
 
 const isBrowser = typeof window !== 'undefined'
 
-interface Dimensions {
-  width: number
-  height: number
-}
-
 function getDimensions({
   element,
   useWindow,
 }: {
   element?: RefObject<HTMLElement>
   useWindow: boolean
-}): Dimensions {
-  if (!isBrowser) return { width: 0, height: 0 }
+}): ClientRect {
+  if (!isBrowser)
+    return { top: 0, bottom: 0, left: 0, right: 0, width: 0, height: 0 }
 
   const target = element && element.current ? element.current : document.body
   const position = target.getBoundingClientRect()
 
   return useWindow
-    ? { width: window.innerWidth, height: window.innerHeight }
-    : { width: position.width, height: position.height }
+    ? {
+        top: window.screenY,
+        bottom: window.screenY + window.innerHeight,
+        left: window.screenX,
+        right: window.screenX + window.innerWidth,
+        width: window.innerWidth,
+        height: window.innerHeight,
+      }
+    : position
 }
 
 export default function useDimensions(
   element: RefObject<HTMLElement>,
   useWindow: boolean
-): Dimensions {
+): ClientRect {
   const [dimensions, setDimensions] = useState(getDimensions({ useWindow }))
 
   useEffect(() => {
