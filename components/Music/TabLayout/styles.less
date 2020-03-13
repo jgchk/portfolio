@@ -48,8 +48,10 @@
 }
 
 .tab-panel-container {
-  overflow-y: scroll;
+  min-height: 0;
+  flex: 1;
+}
 
-  scrollbar-color: @lighterBackground @background;
-  scrollbar-width: thin;
+.tab-panel {
+  height: 100%;
 }

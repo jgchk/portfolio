@@ -1,18 +1,11 @@
-import React, { FunctionComponent, ReactElement, useRef } from 'react'
+import React, { FunctionComponent, ReactElement } from 'react'
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs'
 
-import useScrollPosition from '../../../hooks/useScrollPosition'
-import useDimensions from '../../../hooks/useDimensions'
 import styles from './styles.less'
-
-export interface ExtraProps {
-  dimensions: { width: number; height: number }
-  scrollPosition: { x: number; y: number }
-}
 
 export interface TabElement {
   title: string
-  element: (props: ExtraProps) => ReactElement
+  element: ReactElement
 }
 
 type TabLayoutProps = {
@@ -20,9 +13,6 @@ type TabLayoutProps = {
 }
 
 const TabLayout: FunctionComponent<TabLayoutProps> = ({ tabs }) => {
-  const ref = useRef<HTMLDivElement>(null)
-  const { width, height } = useDimensions(ref, false)
-  const { x, y } = useScrollPosition(ref, false)
   return (
     <Tabs className={styles.tabs}>
       <TabList className={styles.tabList}>
@@ -36,13 +26,10 @@ const TabLayout: FunctionComponent<TabLayoutProps> = ({ tabs }) => {
           </Tab>
         ))}
       </TabList>
-      <div className={styles.tabPanelContainer} ref={ref}>
+      <div className={styles.tabPanelContainer}>
         {tabs.map(tab => (
           <TabPanel className={styles.tabPanel} key={`panel-${tab.title}`}>
-            {tab.element({
-              dimensions: { width, height },
-              scrollPosition: { x, y },
-            })}
+            {tab.element}
           </TabPanel>
         ))}
       </div>

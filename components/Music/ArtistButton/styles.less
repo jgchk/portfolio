@@ -6,10 +6,6 @@
   transition: margin-bottom 0.25s;
 }
 
-.container.expanded {
-  margin-bottom: 172px;
-}
-
 .button {
   box-sizing: border-box;
   height: 32px;
@@ -44,10 +40,12 @@
 }
 
 .animate-expand {
+  opacity: 1;
   animation: expand 0.25s;
 }
 
 .animate-contract {
+  opacity: 0;
   animation: contract 0.25s;
 }
 

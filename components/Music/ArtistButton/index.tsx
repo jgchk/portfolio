@@ -2,8 +2,9 @@ import React, {
   FunctionComponent,
   useCallback,
   useRef,
-  useEffect,
   useState,
+  useMemo,
+  useEffect,
 } from 'react'
 import clsx from 'clsx'
 
@@ -15,16 +16,23 @@ type ArtistButtonProps = {
   artist: Artist
   expanded: boolean
   onClick: () => void
-  windowWidth: number
-  scrollPosition: number
+  getExpansionOffset?: (
+    numAlbums: number,
+    dims: { left: number; top: number; width: number; height: number }
+  ) => {
+    left: number
+    top: number
+    width: number
+    maxWidth: number
+    height: number
+  }
 }
 
 const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
   artist,
   expanded,
   onClick,
-  windowWidth,
-  scrollPosition,
+  getExpansionOffset,
 }) => {
   const buttonRef = useRef<HTMLButtonElement>(null)
   const getDimensions = useCallback(() => {
@@ -36,68 +44,86 @@ const ArtistButton: FunctionComponent<ArtistButtonProps> = ({
       height: button ? button.offsetHeight : 0,
     }
   }, [])
-  const [dimensions, setDimensions] = useState(getDimensions())
-  useEffect(() => {
-    const updateDimensions = (): void => setDimensions(getDimensions())
-    window.addEventListener('resize', updateDimensions)
-    updateDimensions()
-    return (): void => window.removeEventListener('resize', updateDimensions)
-  }, [getDimensions])
 
-  const getExpansionOffset = useCallback(() => {
-    const buttonCenter = dimensions.left + dimensions.width / 2
-
-    const numAlbums = artist.albums.length
-    const albumsWidth = numAlbums * (128 + 2 * 4)
-    const albumsLeft = buttonCenter - albumsWidth / 2
-    const albumsRight = buttonCenter + albumsWidth / 2
-
-    const rightOvershoot = Math.max(albumsRight - windowWidth, 0)
-    const maxLeft = albumsLeft - rightOvershoot
-
-    const leftOffset = rightOvershoot > 0 ? maxLeft : Math.max(4, albumsLeft)
-    const topOffset = dimensions.top + dimensions.height + 4 - scrollPosition
-
-    return {
-      left: leftOffset,
-      top: topOffset,
-      width: albumsWidth,
-      maxWidth: windowWidth,
-    }
-  }, [
-    artist.albums.length,
-    dimensions.height,
-    dimensions.left,
-    dimensions.top,
-    dimensions.width,
-    scrollPosition,
-    windowWidth,
-  ])
-
+  const [transitioning, setTransitioning] = useState(false)
   const [animating, setAnimating] = useState(false)
-  const onClickWrapper = useCallback(() => {
-    setAnimating(true)
-    onClick()
-  }, [onClick, setAnimating])
+  const [localExpanded, setLocalExpanded] = useState(expanded)
+  useEffect(() => {
+    if (localExpanded !== expanded) {
+      setTransitioning(true)
+      setAnimating(true)
+    }
+    setLocalExpanded(expanded)
+  }, [expanded, localExpanded])
+
+  const getExpansionOffsetWrapper = useCallback(
+    () =>
+      getExpansionOffset
+        ? getExpansionOffset(artist.albums.length, getDimensions())
+        : {
+            left: 0,
+            top: 0,
+            width: 0,
+            maxWidth: 0,
+            height: 0,
+          },
+    [artist.albums.length, getDimensions, getExpansionOffset]
+  )
+
+  const [transitionStep, setTransitionStep] = useState(0)
+  useEffect(() => {
+    if (
+      (transitionStep === 0 && transitioning && animating) ||
+      (transitionStep === 1 && transitioning && animating) ||
+      (transitionStep === 2 && !transitioning && !animating)
+    )
+      setTransitionStep(transitionStep + 1)
+    else if (transitionStep === 3 && !transitioning && !animating)
+      setTransitionStep(0)
+  }, [animating, transitionStep, transitioning])
+
+  const [expansionOffset, setExpansionOffset] = useState(
+    getExpansionOffsetWrapper()
+  )
+  const [showExpanded, setShowExpanded] = useState(false)
+  useEffect(() => {
+    if (
+      (expanded && transitionStep === 1) ||
+      (!expanded && transitionStep === 3)
+    ) {
+      setExpansionOffset(getExpansionOffsetWrapper())
+      setShowExpanded(expanded)
+    }
+  }, [expanded, getExpansionOffsetWrapper, transitionStep])
+
+  const marginBottom = useMemo(
+    () => (expanded ? expansionOffset.height : 0) + 4,
+    [expanded, expansionOffset.height]
+  )
 
   return (
-    <div className={clsx(styles.container, expanded && styles.expanded)}>
+    <div
+      className={clsx(styles.container, styles.expanded)}
+      style={{ marginBottom }}
+      onTransitionEnd={(): void => setTransitioning(false)}
+    >
       <button
         className={styles.button}
-        onClick={onClickWrapper}
+        onClick={onClick}
         ref={buttonRef}
         type='button'
       >
         {artist.name}
       </button>
-      {(expanded || animating) && (
-        <div className={styles.expansion} style={getExpansionOffset()}>
+      {showExpanded && (
+        <div className={styles.expansion} style={expansionOffset}>
           {artist.albums.map(album => (
             <AlbumButton
               album={album}
-              className={
+              className={clsx(
+                styles.album,
                 expanded ? styles.animateExpand : styles.animateContract
-              }
+              )}
               onAnimationEnd={(): void => setAnimating(false)}
             />
           ))}
