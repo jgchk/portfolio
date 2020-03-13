@@ -187,7 +187,7 @@ module.exports = {
         },
       ],
       {
-        emptyLineMinimumPropertyThreshold: 4,
+        emptyLineMinimumPropertyThreshold: 5,
       },
     ],
   },
