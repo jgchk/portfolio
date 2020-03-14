@@ -1,5 +1,6 @@
 import React, { FunctionComponent } from 'react'
 
+import { SkeletonTheme } from 'react-loading-skeleton'
 import { Library } from '../../../lib/api/aws'
 
 import TabLayout from '../TabLayout'
@@ -34,7 +35,11 @@ const Music: FunctionComponent<MusicProps> = ({ library }) => {
   }
 
   const tabs = [artistsTab, albumsTab, tracksTab]
-  return <TabLayout tabs={tabs} />
+  return (
+    <SkeletonTheme color='#282a2e' highlightColor='#373b41'>
+      <TabLayout tabs={tabs} />
+    </SkeletonTheme>
+  )
 }
 
 export default Music

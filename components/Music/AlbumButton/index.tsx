@@ -1,6 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import clsx from 'clsx'
 
+import { LazyLoadImage } from 'react-lazy-load-image-component'
+import Skeleton from 'react-loading-skeleton'
+
 import { Album } from '../../../lib/api/aws'
 import styles from './styles.less'
 
@@ -9,6 +12,9 @@ type AlbumButtonProps = {
   className?: string
   onAnimationEnd?: () => void
 }
+
+const imageWidth = 128
+const imageHeight = 128
 
 const AlbumButton: FunctionComponent<AlbumButtonProps> = ({
   album,
@@ -21,7 +27,15 @@ const AlbumButton: FunctionComponent<AlbumButtonProps> = ({
     type='button'
   >
     {album.cover && (
-      <img className={styles.image} src={album.cover.url} alt='cover' />
+      <LazyLoadImage
+        className={styles.image}
+        src={album.cover.url}
+        placeholder={<Skeleton width={imageWidth} height={imageHeight} />}
+        width={imageWidth}
+        height={imageHeight}
+        threshold={imageWidth * imageHeight}
+        alt='cover'
+      />
     )}
     <div className={styles.title}>{album.title}</div>
   </button>
