@@ -1,7 +1,7 @@
 import { NextApiRequest, NextApiResponse } from 'next'
 import Promise from 'bluebird'
 
-import getLibrary from 'lib/api/aws'
+import getLibrary from 'lib/api/aws/s3'
 
 export default async (
   req: NextApiRequest,
