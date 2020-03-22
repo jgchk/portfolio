@@ -10,7 +10,7 @@ import React, {
 import clsx from 'clsx'
 
 import useDimensions from '../../../hooks/useDimensions'
-import { Artist } from '../../../lib/api/aws'
+import { Artist } from '../../../lib/api/aws/s3'
 import AlbumButton from '../AlbumButton'
 import styles from './styles.less'
 

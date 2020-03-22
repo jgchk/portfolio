@@ -2,7 +2,7 @@ import S3 from 'aws-sdk/clients/s3'
 import nanoid from 'nanoid'
 import NodeCache from 'node-cache'
 
-import { notEmpty } from '../types'
+import { notEmpty } from '../../types'
 
 export interface Cover {
   id: string

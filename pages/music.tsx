@@ -2,7 +2,7 @@ import React from 'react'
 import { NextPage } from 'next'
 
 import Library from '../components/Music/Library'
-import getLibrary, { Library as LibraryModel } from '../lib/api/aws'
+import getLibrary, { Library as LibraryModel } from '../lib/api/aws/s3'
 
 type MusicProps = {
   library: LibraryModel

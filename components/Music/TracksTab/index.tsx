@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 
 import TrackButton from '../TrackButton'
-import { Track } from '../../../lib/api/aws'
+import { Track } from '../../../lib/api/aws/s3'
 import styles from './styles.less'
 
 type TracksTabProps = {

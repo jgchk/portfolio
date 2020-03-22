@@ -4,7 +4,7 @@ import clsx from 'clsx'
 import { LazyLoadImage } from 'react-lazy-load-image-component'
 import Skeleton from 'react-loading-skeleton'
 
-import { Album } from '../../../lib/api/aws'
+import { Album } from '../../../lib/api/aws/s3'
 import styles from './styles.less'
 
 type AlbumButtonProps = {

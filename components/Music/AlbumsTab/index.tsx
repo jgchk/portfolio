@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 
 import AlbumButton from '../AlbumButton'
-import { Album } from '../../../lib/api/aws'
+import { Album } from '../../../lib/api/aws/s3'
 import styles from './styles.less'
 
 type AlbumsTabProps = {
