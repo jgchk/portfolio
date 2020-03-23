@@ -1,0 +1,55 @@
+@import '../../../styles/colors.less';
+@import '../../../styles/fonts.less';
+
+.image {
+  object-fit: cover;
+}
+
+.title {
+  box-sizing: border-box;
+  width: 128px;
+
+  height: 32px;
+
+  padding: 0 4px;
+
+  overflow: hidden;
+
+  color: @foreground;
+  font-weight: bold;
+  line-height: 32px;
+  font-family: @RobotoCondensed;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.button {
+  display: flex;
+
+  margin: 4px;
+
+  padding: 0;
+
+  flex-direction: column;
+
+  align-items: center;
+  justify-content: center;
+
+  background-color: @lightBackground;
+
+  border: none;
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: @lighterBackground;
+
+    .title {
+      color: @lightForeground;
+    }
+  }
+
+  &:focus {
+    outline: 1px solid @lighterBackground;
+  }
+}

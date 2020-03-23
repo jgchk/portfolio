@@ -2,8 +2,10 @@
 // Project: https://github.com/iammordaty/soundcloud-api-client
 // Definitions by: Jake Cheek <https://jake.cafe/>
 
-export default class SoundCloud {
-  constructor(config: Config)
+export class SoundCloud {
+  config: Config
+
+  init(config: Config)
 
   get(pathname: string, params?: GetOptions): Promise
 
@@ -12,8 +14,10 @@ export default class SoundCloud {
   request(pathname: string, options?: RequestOptions): Promise
 }
 
+export default new SoundCloud()
+
 export interface Config {
-  client_id: string
+  clientId: string
   hostname?: string
 }
 
@@ -25,6 +29,13 @@ export interface GetOptions {
 export interface RequestOptions extends GetOptions {
   json: boolean
   encoding: string | null
+}
+
+export interface SearchResults {
+  collection: any[]
+  total_results: number
+  next_href: string
+  query_urn: string
 }
 
 export interface User {
@@ -76,6 +87,7 @@ export interface Playlist {
   ean?: string
   purchase_title?: string
   created_with?: string
+  tracks: Track[]
 }
 
 export interface Track {

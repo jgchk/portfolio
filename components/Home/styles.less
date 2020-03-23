@@ -6,13 +6,14 @@
 @titleOffset: @headerOffset + @blurbSize + 8px;
 
 .wrapper {
+  display: flex;
+
   position: absolute;
   top: 0;
+  right: 0;
   bottom: 0;
   left: 0;
-  right: 0;
 
-  display: flex;
   align-items: center;
   justify-content: center;
 
@@ -21,27 +22,38 @@
 
 .menu {
   padding-top: 60px;
+  padding-right: 40px;
   padding-bottom: 50px;
   padding-left: 80px;
-  padding-right: 40px;
 
-  text-align: right;
   font-family: @RobotoMono;
 
+  text-align: right;
+
   background: @lightBackground;
+
   border: 1px solid @lighterBackground;
 
   transform: perspective(100px);
   transform-style: preserve-3d;
 }
 
+.shadow {
+  position: absolute;
+  top: 0;
+  right: 0;
+}
+
 .title {
   position: relative;
+
   padding-bottom: @titleOffset;
-  border-bottom: 1px solid @lighterBackground;
+
+  font-weight: bold;
 
   font-size: 24px;
-  font-weight: bold;
+
+  border-bottom: 1px solid @lighterBackground;
 
   .text {
     color: @red;
@@ -57,9 +69,9 @@
 .blurb {
   position: relative;
   top: -@titleOffset - 6px;
+  font-weight: normal;
 
   font-size: @blurbSize;
-  font-weight: normal;
 
   .text {
     color: @darkForeground;
@@ -74,23 +86,68 @@
 
 .header {
   position: relative;
+
   margin-top: @headerOffset;
   margin-bottom: 4px;
 
-  font-size: 14px;
   font-weight: bold;
+
+  font-size: 14px;
 
   .text {
     color: @foreground;
   }
 }
 
+.icon {
+  &.book {
+    color: #d81b60;
+  }
+
+  &.spotify {
+    color: #1ed760;
+  }
+
+  &.car {
+    color: #f5ce85;
+  }
+
+  &.gamepad {
+    color: #019889;
+  }
+
+  &.hashtag {
+    color: desaturate(#f02, 40%);
+  }
+
+  &.github {
+    color: @darkForeground;
+  }
+
+  &.linkedin {
+    color: #0077b5;
+  }
+
+  &.music {
+    color: #d8885d;
+  }
+
+  &.instagram {
+    color: #e4405f;
+  }
+
+  &.briefcase {
+    color: #4c6ef5;
+  }
+}
+
 .item {
   position: relative;
   margin-bottom: 2px;
+  font-weight: normal;
 
   font-size: 13px;
-  font-weight: normal;
+
   a {
     text-decoration: none;
   }
@@ -103,10 +160,12 @@
   }
 
   .icon {
+    opacity: 0;
+
     position: absolute;
     top: 2px;
     right: -16px;
-    opacity: 0;
+
     transition: all 0.25s;
   }
 
@@ -118,47 +177,8 @@
     }
 
     .icon {
-      right: 0;
       opacity: 1;
+      right: 0;
     }
-  }
-}
-
-.shadow {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-
-.icon {
-  &.book {
-    color: #d81b60;
-  }
-  &.spotify {
-    color: #1ed760;
-  }
-  &.car {
-    color: #f5ce85;
-  }
-  &.gamepad {
-    color: #019889;
-  }
-  &.hashtag {
-    color: desaturate(#ff0022, 40%);
-  }
-  &.github {
-    color: @darkForeground;
-  }
-  &.linkedin {
-    color: #0077b5;
-  }
-  &.music {
-    color: #d8885d;
-  }
-  &.instagram {
-    color: #e4405f;
-  }
-  &.briefcase {
-    color: #4c6ef5;
   }
 }

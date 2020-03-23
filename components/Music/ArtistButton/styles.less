@@ -1,0 +1,84 @@
+@import '../../../styles/colors.less';
+@import '../../../styles/fonts.less';
+
+.container {
+  margin: 4px;
+  transition: margin-bottom 0.25s;
+}
+
+.button {
+  box-sizing: border-box;
+  height: 32px;
+
+  padding: 4px 8px;
+
+  color: @foreground;
+  font-size: medium;
+  font-family: @RobotoCondensed;
+
+  background-color: @lightBackground;
+
+  border: none;
+
+  cursor: pointer;
+}
+
+.button:focus {
+  outline: 1px solid @lighterBackground;
+}
+
+.button:hover {
+  color: @lightForeground;
+  background-color: @lighterBackground;
+}
+
+.expansion {
+  display: flex;
+  position: absolute;
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.animate-expand {
+  opacity: 1;
+  animation: expand 0.25s;
+}
+
+.animate-contract {
+  opacity: 0;
+  animation: contract 0.25s;
+}
+
+@keyframes expand {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+
+  25% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 1;
+    transform: scaleY(1);
+  }
+}
+
+@keyframes contract {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  75% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+}

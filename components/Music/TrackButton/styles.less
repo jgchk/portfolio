@@ -1,0 +1,30 @@
+@import '../../../styles/colors.less';
+@import '../../../styles/fonts.less';
+
+.button {
+  box-sizing: border-box;
+  height: 32px;
+
+  margin: 4px;
+
+  padding: 4px 8px;
+
+  color: @foreground;
+  font-size: medium;
+  font-family: @RobotoCondensed;
+
+  background-color: @lightBackground;
+
+  border: none;
+
+  cursor: pointer;
+
+  &:focus {
+    outline: 1px solid @lighterBackground;
+  }
+
+  &:hover {
+    color: @lightForeground;
+    background-color: @lighterBackground;
+  }
+}

@@ -1,0 +1,73 @@
+@import '../../../styles/colors.less';
+@import '../../../styles/fonts.less';
+
+.tabs {
+  display: flex;
+
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  flex-direction: column;
+
+  overflow: hidden;
+
+  background-color: @background;
+}
+
+.tab-list {
+  display: flex;
+
+  z-index: 10;
+
+  margin: 0;
+
+  padding: 0;
+
+  flex-direction: row;
+
+  background-color: @background;
+
+  border-bottom: 1px solid @lightBackground;
+
+  box-shadow: 0 0 4px 4px fade(black, 10%);
+
+  list-style-type: none;
+}
+
+.tab {
+  display: flex;
+
+  padding: 8px 16px;
+
+  fill: @darkForeground;
+
+  color: @darkForeground;
+  font-weight: bold;
+  font-size: x-large;
+  font-family: @RobotoSlab;
+
+  cursor: pointer;
+
+  &:focus {
+    outline: 1px solid @foreground;
+  }
+
+  &.selected {
+    fill: @foreground;
+    color: @foreground;
+    background-color: @lightBackground;
+    cursor: default;
+  }
+}
+
+.tab-panel-container {
+  min-height: 0;
+}
+
+.tab-panel {
+  height: 100%;
+  flex: 1;
+}

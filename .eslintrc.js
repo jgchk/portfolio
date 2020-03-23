@@ -34,5 +34,6 @@ module.exports = {
     '@typescript-eslint/indent': 'off',
     '@typescript-eslint/unbound-method': 'off',
     'spaced-comment': ['error', 'always', { line: { markers: ['/'] } }],
+    'react/prop-types': 'off',
   },
 }

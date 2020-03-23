@@ -1,9 +1,16 @@
-import SoundCloud, { Track, Playlist } from 'soundcloud-api-client'
+import SC, {
+  Track,
+  Playlist,
+  GetOptions,
+  SearchResults,
+} from 'soundcloud-v2-api'
 import fetch from 'node-fetch'
 import Promise from 'bluebird'
+import { AxiosError } from 'axios'
 
 import { sortMostSimilar } from 'lib/string'
 import { formatMilliseconds } from 'lib/time'
+import { editClientId, filterClientIds } from 'lib/api/aws/rds'
 import {
   Api,
   Searchable,
@@ -13,7 +20,35 @@ import {
   SearchType,
 } from './type'
 
-const SC = new SoundCloud({ client_id: process.env.SOUNDCLOUD_ID || '' })
+async function setNewClientId(): Promise<void> {
+  const unexpiredClientIds = await filterClientIds({ expired: false })
+  if (unexpiredClientIds.length === 0)
+    throw new Error('no SoundCloud client ids available')
+  const newClientId = unexpiredClientIds[0]
+  await editClientId(newClientId, { used: true })
+  SC.init({ clientId: newClientId })
+}
+
+/* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+async function getSafe(path: string, params?: GetOptions): Promise<any> {
+  if (!(SC.config && SC.config.clientId)) await setNewClientId()
+
+  return SC.get(path, params).catch(async (err: AxiosError) => {
+    if (err.response && err.response.status === 401) {
+      // set id as expired
+      const currentClientId = SC.config && SC.config.clientId
+      if (currentClientId)
+        await editClientId(currentClientId, { expired: true })
+
+      // get new id
+      setNewClientId()
+
+      // re-get
+      return getSafe(path, params)
+    }
+    throw err
+  })
+}
 
 async function getReleaseDate(release: Track | Playlist): Promise<Date> {
   const url = release.permalink_url
@@ -28,7 +63,9 @@ async function getReleaseDate(release: Track | Playlist): Promise<Date> {
 }
 
 async function getTracks(release: Playlist): Promise<Array<ReleaseTrack>> {
-  const response: Array<Track> = await SC.get(`/playlists/${release.id}/tracks`)
+  const response: Array<Track> = await getSafe(
+    `/playlists/${release.id}/tracks`
+  )
   return response.map((track, i) => {
     return {
       position: String(i + 1),
@@ -57,7 +94,12 @@ async function formatRelease(release: Track | Playlist): Promise<Release> {
       },
     ]
   } else {
-    tracks = await getTracks(release)
+    tracks = release.tracks.map((track, i) => ({
+      position: String(i + 1),
+      title: track.title,
+      duration: formatMilliseconds(track.duration),
+    }))
+
     const { length } = tracks
     if (length < 3) {
       type = 'single'
@@ -85,7 +127,7 @@ function test(url: string): boolean {
 }
 
 async function resolve(url: string): Promise<Release> {
-  const data = await SC.get('/resolve', { url })
+  const data = await getSafe('/resolve', { url })
   return formatRelease(data)
 }
 
@@ -93,9 +135,11 @@ async function searchType(
   title: string,
   artist: string,
   endpoint: '/tracks' | '/playlists'
-): Promise<Array<Track | Playlist>> {
+): Promise<SearchResults> {
   const query = `${artist} ${title}`
-  const results: Array<Track | Playlist> = await SC.get(endpoint, { q: query })
+  const results = await getSafe(`/search${endpoint}`, {
+    q: query,
+  })
   return results
 }
 
@@ -107,10 +151,11 @@ async function search(
 ): Promise<Array<Release>> {
   let results
   if (type === 'album') {
-    results = await searchType(title, artist, '/playlists')
-    if (!results) results = await searchType(title, artist, '/tracks')
+    results = (await searchType(title, artist, '/playlists')).collection
+    if (!results)
+      results = (await searchType(title, artist, '/tracks')).collection
   } else {
-    results = await searchType(title, artist, '/tracks')
+    results = (await searchType(title, artist, '/tracks')).collection
   }
 
   const sortedResults = sortMostSimilar(
