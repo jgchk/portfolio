@@ -3,6 +3,8 @@
 // Definitions by: Jake Cheek <https://jake.cafe/>
 
 export class SoundCloud {
+  config: Config
+
   init(config: Config)
 
   get(pathname: string, params?: GetOptions): Promise
@@ -27,6 +29,13 @@ export interface GetOptions {
 export interface RequestOptions extends GetOptions {
   json: boolean
   encoding: string | null
+}
+
+export interface SearchResults {
+  collection: any[]
+  total_results: number
+  next_href: string
+  query_urn: string
 }
 
 export interface User {
@@ -78,6 +87,7 @@ export interface Playlist {
   ean?: string
   purchase_title?: string
   created_with?: string
+  tracks: Track[]
 }
 
 export interface Track {
