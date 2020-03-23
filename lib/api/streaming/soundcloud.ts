@@ -94,7 +94,12 @@ async function formatRelease(release: Track | Playlist): Promise<Release> {
       },
     ]
   } else {
-    tracks = release.tracks
+    tracks = release.tracks.map((track, i) => ({
+      position: String(i + 1),
+      title: track.title,
+      duration: formatMilliseconds(track.duration),
+    }))
+
     const { length } = tracks
     if (length < 3) {
       type = 'single'
