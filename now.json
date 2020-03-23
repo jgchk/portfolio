@@ -4,7 +4,6 @@
     "SPOTIFY_SECRET": "@spotify-secret",
     "DISCOGS_KEY": "@discogs-key",
     "DISCOGS_SECRET": "@discogs-secret",
-    "SOUNDCLOUD_ID": "@soundcloud-id",
     "AWS_ID": "@aws-id",
     "AWS_SECRET": "@aws-secret",
     "RDS_ARN": "@rds-arn",
