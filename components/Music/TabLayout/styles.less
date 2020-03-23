@@ -53,6 +53,11 @@
     outline: 1px solid @foreground;
   }
 
+  &:hover {
+    color: @foreground;
+    background-color: lighten(@background, 2.5%);
+  }
+
   &.selected {
     fill: @foreground;
     color: @foreground;
