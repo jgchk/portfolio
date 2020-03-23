@@ -2,8 +2,8 @@
 // Project: https://github.com/iammordaty/soundcloud-api-client
 // Definitions by: Jake Cheek <https://jake.cafe/>
 
-export default class SoundCloud {
-  constructor(config: Config)
+export class SoundCloud {
+  init(config: Config)
 
   get(pathname: string, params?: GetOptions): Promise
 
@@ -12,8 +12,10 @@ export default class SoundCloud {
   request(pathname: string, options?: RequestOptions): Promise
 }
 
+export default new SoundCloud()
+
 export interface Config {
-  client_id: string
+  clientId: string
   hostname?: string
 }
 

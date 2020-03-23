@@ -1,4 +1,4 @@
-import SoundCloud, { Track, Playlist } from 'soundcloud-api-client'
+import SC, { Track, Playlist } from 'soundcloud-v2-api'
 import fetch from 'node-fetch'
 import Promise from 'bluebird'
 
@@ -13,7 +13,7 @@ import {
   SearchType,
 } from './type'
 
-const SC = new SoundCloud({ client_id: process.env.SOUNDCLOUD_ID || '' })
+SC.init({ clientId: process.env.SOUNDCLOUD_ID || '' })
 
 async function getReleaseDate(release: Track | Playlist): Promise<Date> {
   const url = release.permalink_url
