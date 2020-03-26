@@ -29,6 +29,13 @@ export default class DB {
       .then(response => response.Item)
   }
 
+  getAll(): Promise<DynamoDB.DocumentClient.ItemList | undefined> {
+    return this.db
+      .scan({ ...baseParams })
+      .promise()
+      .then(response => response.Items)
+  }
+
   put<T>(
     item: T
   ): Promise<PromiseResult<DynamoDB.DocumentClient.PutItemOutput, AWSError>> {
