@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 
 import { SkeletonTheme } from 'react-loading-skeleton'
-import { Library } from '../../../lib/api/aws/s3'
+import { Library } from '../../../lib/api/library'
 
 import TabLayout from '../TabLayout'
 import ArtistsTab from '../ArtistsTab'
