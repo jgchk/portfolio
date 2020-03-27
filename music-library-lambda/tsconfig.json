@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "outDir": "./.webpack/",
+    "module": "esnext",
+    "target": "es5",
+    "allowJs": true
+  },
+  "include": ["./webpack.config.js", "**/*.ts"]
+}
