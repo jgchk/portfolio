@@ -30,7 +30,7 @@ plugins:
 custom:
   webpack:
     webpackConfig: 'webpack.config.js'
-    keepOutputDirectory: true
+    keepOutputDirectory: false
 
 # you can overwrite defaults here
 #  stage: dev

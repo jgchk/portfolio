@@ -6,6 +6,7 @@ const tsConfig = path.resolve(__dirname, 'tsconfig.json')
 module.exports = {
   entry: './handler.ts',
   target: 'node',
+  mode: 'production',
   module: {
     rules: [
       {

@@ -10,9 +10,7 @@
     "dev": "next",
     "build": "next build",
     "start": "next start",
-    "lint": "prettier --list-different \"./**/*.{js,jsx,ts,tsx,json,css,less,md}\" && eslint --ext .js,.jsx,.ts,.tsx ./",
-    "fix": "prettier --write \"./**/*.{js,jsx,ts,tsx,json,css,less,md}\" && eslint --fix --ext .js,.jsx,.ts,.tsx ./",
-    "test": "yarn run lint"
+    "deploy": "cd music-library-lambda && serverless deploy"
   },
   "dependencies": {
     "@async-generators/to-array": "^0.1.0",
