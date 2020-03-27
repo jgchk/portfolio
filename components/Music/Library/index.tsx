@@ -1,6 +1,8 @@
 import React, { FunctionComponent } from 'react'
-
 import { SkeletonTheme } from 'react-loading-skeleton'
+import useSWR from 'swr'
+import Flatted from 'flatted/cjs'
+
 import { Library } from '../../../lib/api/library'
 
 import TabLayout from '../TabLayout'
@@ -12,26 +14,28 @@ import Player from '../Player'
 
 import styles from './styles.less'
 
-type MusicProps = {
-  library: Library
-}
+const fetcher = (url: string): Promise<Library> =>
+  fetch(url)
+    .then(r => r.text())
+    .then(t => Flatted.parse(t))
 
-const Music: FunctionComponent<MusicProps> = ({ library }) => {
-  const { artists } = library
+const Music: FunctionComponent<{}> = () => {
+  const { data, error } = useSWR('/api/music/library', fetcher)
+  if (error) return <div>failed to load</div>
+  if (!data) return <div>loading...</div>
+  console.log(data)
+
+  const { artists, albums, tracks } = data
   const artistsTab = {
     id: 'artists',
     tab: 'Artists',
     panel: <ArtistsTab artists={artists} />,
   }
-
-  const albums = artists.flatMap(artist => artist.albums)
   const albumsTab = {
     id: 'albums',
     tab: 'Albums',
     panel: <AlbumsTab albums={albums} />,
   }
-
-  const tracks = albums.flatMap(album => album.tracks)
   const tracksTab = {
     id: 'tracks',
     tab: 'Tracks',

@@ -3,12 +3,9 @@ import { IS3Options, makeTokenizer } from '@tokenizer/s3'
 import { parseFromTokenizer } from 'music-metadata/lib/core'
 import { IOptions, IAudioMetadata } from 'music-metadata'
 import Promise from 'bluebird'
-import { fromTokenizer, FileTypeResult } from 'file-type'
 
-import { isTemp } from '../../file'
-
-const Bucket = 'jake.cafe-music'
-const s3 = new S3({
+export const Bucket = 'jake.cafe-music'
+export const s3 = new S3({
   apiVersion: '2006-03-01',
   accessKeyId: process.env.AWS_ID || '',
   secretAccessKey: process.env.AWS_SECRET || '',
@@ -37,14 +34,6 @@ export async function* getObjects(): AsyncGenerator<S3.Types.Object> {
   } while (continuationToken)
 }
 
-export async function getFileType(
-  objRequest: S3.GetObjectRequest,
-  options?: IS3Options & IOptions
-): Promise<FileTypeResult | undefined> {
-  const s3Tokenizer = await makeTokenizer(s3, objRequest, options)
-  return fromTokenizer(s3Tokenizer)
-}
-
 export async function getMusicMetadata(
   objRequest: S3.GetObjectRequest,
   options?: IS3Options & IOptions
@@ -53,35 +42,6 @@ export async function getMusicMetadata(
   return parseFromTokenizer(s3Tokenizer, options)
 }
 
-function getMimeType(fileType: FileTypeResult): string {
-  const { mime } = fileType
-  return mime.split('/')[0]
-}
-
-export interface ObjectMetadata {
-  type: string
-  meta?: IAudioMetadata
-}
-
-export async function getObjectMetadata(
-  obj: S3.Types.Object
-): Promise<ObjectMetadata | undefined> {
-  if (!obj.Key) return undefined
-  if (isTemp(obj.Key)) return undefined
-
-  const params = { Bucket, Key: obj.Key }
-  const fileType = await getFileType(params)
-  if (!fileType) return undefined
-
-  const mimeType = getMimeType(fileType)
-  const res: ObjectMetadata = { type: mimeType }
-  if (mimeType === 'audio') {
-    const meta = await getMusicMetadata({
-      Bucket,
-      Key: obj.Key,
-    })
-    if (meta) res.meta = meta
-  }
-
-  return res
+export async function getUrl(path: string): Promise<string> {
+  return s3.getSignedUrlPromise('getObject', { Bucket, Key: path })
 }
