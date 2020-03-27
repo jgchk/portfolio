@@ -1,3 +1,5 @@
+import { updateLibrary } from '../lib/api/library'
+
 export interface Response {
   statusCode: number
   body: ResponsePayload
@@ -5,6 +7,8 @@ export interface Response {
 
 export interface ResponsePayload {
   message: string
+  /* eslint-disable-next-line @typescript-eslint/no-explicit-any */
+  body?: any
   event: EventPayload
 }
 
@@ -16,7 +20,6 @@ export interface EventPayload {
 /* eslint-disable-next-line @typescript-eslint/no-empty-interface */
 export interface QueryParameters {}
 
-/* eslint-disable-next-line import/prefer-default-export */
 export const hello = async (event: EventPayload): Promise<Response> =>
   Promise.resolve({
     statusCode: 200,
@@ -25,3 +28,21 @@ export const hello = async (event: EventPayload): Promise<Response> =>
       event,
     },
   })
+
+export const update = async (event: EventPayload): Promise<Response> =>
+  updateLibrary()
+    .then(() => ({
+      statusCode: 200,
+      body: {
+        message: 'Library updated!',
+        event,
+      },
+    }))
+    .catch(e => ({
+      statusCode: 500,
+      body: {
+        message: 'Library failed to update.',
+        body: e,
+        event,
+      },
+    }))

@@ -26,6 +26,7 @@ provider:
 
 plugins:
   - serverless-webpack
+  - serverless-dotenv-plugin
 
 custom:
   webpack:
@@ -68,6 +69,11 @@ custom:
 functions:
   hello:
     handler: handler.hello
+  update:
+    handler: handler.update
+    environment:
+      AWS_ID: ${env:AWS_ID}
+      AWS_SECRET: ${env:AWS_SECRET}
 #    The following are a few example events you can configure
 #    NOTE: Please make sure to change your handler code to work with those events
 #    Check the event documentation for details
