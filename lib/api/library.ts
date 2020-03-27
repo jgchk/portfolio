@@ -1,4 +1,4 @@
-import Promise from 'bluebird'
+import Bluebird from 'bluebird'
 import toArray from '@async-generators/to-array'
 import { IAudioMetadata } from 'music-metadata'
 import { DocumentClient } from 'aws-sdk/clients/dynamodb'
@@ -55,11 +55,11 @@ export async function updateLibrary(): Promise<void> {
   const objects = await toArray(getObjects())
   const partitions = partition(objects, 25)
 
-  await Promise.each(partitions, async (part, i) => {
+  await Bluebird.each(partitions, async (part, i) => {
     const tracks: TrackMetadata[] = []
     const covers: CoverMetadata[] = []
 
-    await Promise.all(
+    await Bluebird.all(
       part.map(async obj => {
         const objMeta = await getObjectMetadata(obj)
         if (!objMeta) return
@@ -158,7 +158,7 @@ export async function getLibrary(): Promise<Library> {
   const albums: { [id: string]: Album } = {}
   const tracks: { [id: string]: Track } = {}
 
-  await Promise.each(tracksMeta, async trackMeta => {
+  await Bluebird.each(tracksMeta, async trackMeta => {
     const [artistPathElement, albumPathElement] = trackMeta.s3path.split('/')
     const artistPath = `${artistPathElement}`
     const albumPath = `${artistPath}/${albumPathElement}`

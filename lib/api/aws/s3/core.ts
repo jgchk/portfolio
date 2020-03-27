@@ -2,7 +2,6 @@ import S3 from 'aws-sdk/clients/s3'
 import { IS3Options, makeTokenizer } from '@tokenizer/s3'
 import { parseFromTokenizer } from 'music-metadata/lib/core'
 import { IOptions, IAudioMetadata } from 'music-metadata'
-import Promise from 'bluebird'
 
 export const Bucket = 'jake.cafe-music'
 export const s3 = new S3({
