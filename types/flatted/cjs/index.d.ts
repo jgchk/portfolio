@@ -1,3 +1,3 @@
-import Flatted from '../types'
+import Flatted from '../index'
 
 export default Flatted
