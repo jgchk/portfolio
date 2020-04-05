@@ -1,5 +1,4 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import Promise from 'bluebird'
 
 import { updateLibrary } from 'lib/api/library'
 
