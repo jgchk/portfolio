@@ -11,7 +11,7 @@ import useScrollPosition from '../../../hooks/useScrollPosition'
 import useDimensions from '../../../hooks/useDimensions'
 
 import ArtistButton from '../ArtistButton'
-import { Artist } from '../../../lib/api/aws/s3'
+import { Artist } from '../../../lib/api/library'
 import styles from './styles.less'
 
 type ArtistsTabProps = {

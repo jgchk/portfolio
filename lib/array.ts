@@ -10,3 +10,15 @@ export function asArray<T>(array: T[] | T): T[] {
 export function isStringArray(array: any[]): array is string[] {
   return typeof array[0] === 'string'
 }
+
+export function partition<T>(arr: T[], size: number): T[][] {
+  let part: T[] = []
+  return arr.reduce((acc: T[][], val: T) => {
+    part.push(val)
+    if (part.length === size) {
+      acc.push(part)
+      part = []
+    }
+    return acc
+  }, [])
+}

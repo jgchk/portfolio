@@ -32,7 +32,7 @@ export interface RequestOptions extends GetOptions {
 }
 
 export interface SearchResults {
-  collection: any[]
+  collection: (User | Playlist | Track)[]
   total_results: number
   next_href: string
   query_urn: string

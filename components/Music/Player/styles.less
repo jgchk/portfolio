@@ -1,0 +1,52 @@
+@import '../../../styles/colors.less';
+@import '../../../styles/fonts.less';
+
+.container {
+  display: flex;
+
+  position: relative;
+  z-index: 20;
+
+  box-sizing: border-box;
+  height: 100%;
+
+  padding: 4px;
+
+  flex-direction: row;
+  align-items: center;
+
+  color: @foreground;
+  font-family: @Roboto;
+
+  background-color: @lightBackground;
+
+  border-top: 1px solid @lighterBackground;
+
+  box-shadow: 0 0 4px 4px fade(black, 15%);
+}
+
+.cover {
+  height: 64px;
+  margin-right: 4px;
+  flex: 0 1 64px;
+  background-color: @lighterBackground;
+}
+
+.track-info {
+  display: flex;
+  margin-left: 4px;
+  flex: 1;
+  flex-direction: column;
+}
+
+.track-name {
+  margin-bottom: 4px;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.track-artist {
+  color: @darkerForeground;
+  font-weight: bold;
+  font-size: 12px;
+}
