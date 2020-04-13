@@ -11,7 +11,7 @@ export default async (
 ): Promise<void> => {
   const url = first(req.query.url)
 
-  const responses = await Promise.map(apis, async api => {
+  const responses = await Promise.map(Object.values(apis), async api => {
     if (!isResolvable(api)) return {}
     if (!api.test(url)) return {}
     const result = await api.resolve(url)
