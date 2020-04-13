@@ -9,6 +9,7 @@ import Promise from 'bluebird'
 import { sortMostSimilar } from 'lib/string'
 import { formatMilliseconds } from 'lib/time'
 import { Api, Searchable, Resolvable, Release, SearchType } from './type'
+import { getTypeFromTracks } from './common'
 
 const BC = {
   getAlbumInfo: Promise.promisify(Bandcamp.getAlbumInfo),
@@ -20,15 +21,8 @@ function formatAlbumInfo(albumInfo: AlbumInfo): Release {
     albumInfo.raw.album_release_date || albumInfo.raw.current.release_date
   )
 
-  let type
   const { length } = albumInfo.raw.trackinfo
-  if (length < 3) {
-    type = 'single'
-  } else if (length < 7) {
-    type = 'ep'
-  } else {
-    type = 'album'
-  }
+  const type = getTypeFromTracks(length)
 
   const tracks = albumInfo.raw.trackinfo.map((track, i) => {
     const position =
