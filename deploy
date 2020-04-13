@@ -1,0 +1,3 @@
+#! /bin/sh
+
+ssh jake@161.35.5.220 'cd /home/jake/portfolio && git pull && yarn install && yarn build && /usr/lib/node_modules/pm2/bin/pm2 restart cafe'

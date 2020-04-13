@@ -99,7 +99,7 @@ async function search(
 }
 
 const api: Api & Searchable & Resolvable = {
-  name: 'iTunes',
+  name: 'Apple Music',
   test,
   resolve,
   search,

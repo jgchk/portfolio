@@ -3,12 +3,14 @@ import discogs from './discogs'
 import soundcloud from './soundcloud'
 import spotify from './spotify'
 import youtube from './youtube'
-import itunes from './itunes'
+import applemusic from './applemusic'
 
-const apis = [bandcamp, discogs, soundcloud, spotify, youtube, itunes]
-export default apis
+import { Api } from './type'
 
-export const apiMap = Object.assign(
+const apis = [bandcamp, discogs, soundcloud, spotify, youtube, applemusic]
+const apiMap: Record<string, Api> = Object.assign(
   {},
-  ...apis.map(api => ({ [api.name.toLowerCase()]: api }))
+  ...apis.map(api => ({ [api.name.replace(/ /g, '').toLowerCase()]: api }))
 )
+
+export default apiMap

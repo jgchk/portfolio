@@ -2,7 +2,7 @@ import { NextApiRequest, NextApiResponse } from 'next'
 import Promise from 'bluebird'
 
 import { first, asArray } from 'lib/array'
-import apis, { apiMap } from 'lib/api/streaming'
+import apis from 'lib/api/streaming'
 import { isSearchable, isSearchType, Release } from 'lib/api/streaming/type'
 
 export default async (
@@ -12,7 +12,7 @@ export default async (
   const { title, artist, limit, type, source, haveSource } = req.query
   const sources = source
     ? asArray(source).map(s => s.toLowerCase())
-    : apis.map(api => api.name.toLowerCase())
+    : Object.keys(apis)
   const haveSources = haveSource
     ? asArray(haveSource).map(s => s.toLowerCase())
     : []
@@ -24,10 +24,10 @@ export default async (
     return
   }
 
-  const responses = await Promise.map(filteredSources, async s => {
-    const api = apiMap[s]
+  const responses = await Promise.map(filteredSources, async src => {
+    const api = apis[src]
     if (!isSearchable(api)) return {}
-    if (sources && !sources.includes(api.name.toLowerCase())) return {}
+    if (sources && !sources.includes(src)) return {}
 
     let results: Release[] = []
     try {
@@ -38,9 +38,10 @@ export default async (
         parseInt(first(limit), 10) || 1
       )
     } catch (e) {
+      /* eslint-disable-next-line no-console */
       console.log(e)
     }
-    return { [api.name.toLowerCase()]: results }
+    return { [src]: results }
   })
 
   res.status(200).json(Object.assign({}, ...responses))
