@@ -1,12 +1,11 @@
 import fetch from 'node-fetch'
-import { JSDOM } from 'jsdom'
 import querystring from 'querystring'
 import Bluebird from 'bluebird'
 
 import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 import { notEmpty } from '../../types'
 import { getTypeFromTracks } from './common'
-import { isTimeElement, isLinkElement } from '../../html'
+import { fetchDocument, isTimeElement, isLinkElement } from '../../html'
 
 function test(url: string): boolean {
   const regex = /http(?:s)?:\/\/music\.apple\.com\/(\w{2,4})\/album\/([^/]*)\/([^?]+)[^/]*/
@@ -14,10 +13,7 @@ function test(url: string): boolean {
 }
 
 async function resolve(url: string): Promise<Release> {
-  const response = await fetch(url)
-  const html = await response.text()
-  const dom = new JSDOM(html)
-  const doc = dom.window.document
+  const doc = await fetchDocument(url)
 
   const title = doc.querySelector('.product-header__title')?.textContent
   if (!title) throw Error(`no release title found for url: ${url}`)
