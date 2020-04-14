@@ -5,6 +5,7 @@ import spotify from './spotify'
 import youtube from './youtube'
 import applemusic from './applemusic'
 import googleplay from './googleplay'
+import beatport from './beatport'
 
 import { Api } from './type'
 
@@ -16,6 +17,7 @@ const apis = [
   youtube,
   applemusic,
   googleplay,
+  beatport,
 ]
 const apiMap: Record<string, Api> = Object.assign(
   {},

@@ -1,3 +1,4 @@
+import fetch from 'node-fetch'
 import { JSDOM } from 'jsdom'
 
 export function isTimeElement(el: Element): el is HTMLTimeElement {
