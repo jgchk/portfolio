@@ -6,18 +6,11 @@ import Bluebird from 'bluebird'
 import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 import { notEmpty } from '../../types'
 import { getTypeFromTracks } from './common'
+import { isTimeElement, isLinkElement } from '../../html'
 
 function test(url: string): boolean {
   const regex = /http(?:s)?:\/\/music\.apple\.com\/(\w{2,4})\/album\/([^/]*)\/([^?]+)[^/]*/
   return regex.test(url)
-}
-
-function isTimeElement(el: Element): el is HTMLTimeElement {
-  return 'dateTime' in el
-}
-
-function isLinkElement(el: Element): el is HTMLLinkElement {
-  return 'href' in el
 }
 
 async function resolve(url: string): Promise<Release> {
