@@ -1,10 +1,8 @@
-import { JSDOM } from 'jsdom'
 import querystring from 'querystring'
 import Bluebird from 'bluebird'
-import fetch from 'node-fetch'
 
 import { Api, Searchable, Resolvable, Release, SearchType } from './type'
-import { isLinkElement } from '../../html'
+import { fetchDocument, isLinkElement } from '../../html'
 import { notEmpty } from '../../types'
 import { getTypeFromTracks } from './common'
 import { sortMostSimilar } from '../../string'
@@ -15,10 +13,7 @@ function test(url: string): boolean {
 }
 
 async function resolve(url: string): Promise<Release> {
-  const response = await fetch(url)
-  const html = await response.text()
-  const dom = new JSDOM(html)
-  const doc = dom.window.document
+  const doc = await fetchDocument(url)
 
   const titleEl = doc.querySelector("h1[itemprop='name']")
   const title = titleEl?.textContent
@@ -75,11 +70,7 @@ async function search(
     c: 'music',
   }
   const url = `${baseUrl}/?${querystring.stringify(params)}`
-
-  const response = await fetch(url)
-  const html = await response.text()
-  const dom = new JSDOM(html)
-  const doc = dom.window.document
+  const doc = await fetchDocument(url)
 
   const results = Array.from(
     doc.querySelectorAll("a[href^='/store/music/album']")
