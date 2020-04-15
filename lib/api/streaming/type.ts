@@ -15,7 +15,7 @@ export interface Release {
 export interface Track {
   position: string
   title: string
-  duration: string
+  duration?: string
 }
 
 export type SearchType = 'album' | 'track'
