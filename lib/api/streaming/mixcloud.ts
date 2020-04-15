@@ -45,10 +45,12 @@ async function resolve(url: string): Promise<Release> {
   const [, artistPath, mixPath] = match
 
   const baseUrl = 'https://api.mixcloud.com'
-  const apiUrl = `${baseUrl}/${artistPath}/${mixPath}`
+  const apiUrl = `${baseUrl}/${artistPath}/${mixPath}/`
+  console.log('mixcloud', apiUrl)
 
   const response = await fetch(apiUrl)
   const info = await response.json()
+  console.log('mixcloud', info)
   return formatInfo(info)
 }
 
