@@ -26,7 +26,6 @@ function formatInfo(info: Record<string, any>): Release {
       duration: formatMilliseconds(1000 * info.audio_length),
     },
   ]
-  const type = 'mix'
 
   return {
     title,
@@ -34,7 +33,7 @@ function formatInfo(info: Record<string, any>): Release {
     attributes: ['streaming'],
     date,
     link,
-    type,
+    type: 'mix',
     tracks,
   }
 }
@@ -46,11 +45,9 @@ async function resolve(url: string): Promise<Release> {
 
   const baseUrl = 'https://api.mixcloud.com'
   const apiUrl = `${baseUrl}/${artistPath}/${mixPath}/`
-  console.log('mixcloud', apiUrl)
 
   const response = await fetch(apiUrl)
   const info = await response.json()
-  console.log('mixcloud', info)
   return formatInfo(info)
 }
 

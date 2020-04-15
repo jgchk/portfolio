@@ -2,7 +2,7 @@ import querystring from 'querystring'
 import Bluebird from 'bluebird'
 
 import { Api, Searchable, Resolvable, Release, SearchType } from './type'
-import { fetchDocument, isLinkElement } from '../../html'
+import { fetchDocument, isLinkElement, getFullLink } from '../../html'
 import { notEmpty } from '../../types'
 import { getTypeFromTracks } from './common'
 import { sortMostSimilar } from '../../string'
@@ -86,11 +86,8 @@ async function search(
         .join(', ')
       let resultLink
       const resultLinkEl = metaEl.querySelector('a:first-child')
-      if (resultLinkEl && isLinkElement(resultLinkEl)) {
-        const link = resultLinkEl.href
-        if (link.startsWith('/')) resultLink = `${baseReleaseUrl}${link}`
-        else resultLink = link
-      }
+      if (resultLinkEl && isLinkElement(resultLinkEl))
+        resultLink = getFullLink(resultLinkEl, baseReleaseUrl)
       if (!(resultTitle && resultArtist && resultLink)) return null
       return { title: resultTitle, artist: resultArtist, link: resultLink }
     })

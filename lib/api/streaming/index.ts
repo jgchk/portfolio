@@ -7,6 +7,7 @@ import applemusic from './applemusic'
 import googleplay from './googleplay'
 import beatport from './beatport'
 import mixcloud from './mixcloud'
+import ntsradio from './ntsradio'
 
 import { Api } from './type'
 
@@ -20,6 +21,7 @@ const apis = [
   googleplay,
   beatport,
   mixcloud,
+  ntsradio,
 ]
 const apiMap: Record<string, Api> = Object.assign(
   {},
