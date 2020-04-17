@@ -9,6 +9,10 @@ export function isLinkElement(el: Element): el is HTMLLinkElement {
   return 'href' in el
 }
 
+export function isMetaElement(el: Element): el is HTMLMetaElement {
+  return 'content' in el
+}
+
 export function getFullLink(el: HTMLLinkElement, baseUrl: string): string {
   const link = el.href
   if (link.startsWith('/')) {
