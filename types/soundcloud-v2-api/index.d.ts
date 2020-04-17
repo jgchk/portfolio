@@ -118,6 +118,7 @@ export interface Track {
   description: string
   title: string
   duration: number
+  full_duration: number
   artwork_url: string
   video_url?: string
   tag_list: string

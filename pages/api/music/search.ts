@@ -26,8 +26,8 @@ export default async (
 
   const responses = await Promise.map(filteredSources, async src => {
     const api = apis[src]
+    if (!api) return {}
     if (!isSearchable(api)) return {}
-    if (sources && !sources.includes(src)) return {}
 
     let results: Release[] = []
     try {
