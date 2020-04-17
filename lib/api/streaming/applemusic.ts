@@ -5,7 +5,7 @@ import Bluebird from 'bluebird'
 import { Api, Searchable, Resolvable, Release, SearchType } from './type'
 import { notEmpty } from '../../types'
 import { getTypeFromTracks } from './common'
-import { fetchDocument, isTimeElement, isLinkElement } from '../../html'
+import { fetchDocument, isMetaElement, isLinkElement } from '../../html'
 
 function test(url: string): boolean {
   const regex = /http(?:s)?:\/\/music\.apple\.com\/(\w{2,4})\/album\/([^/]*)\/([^?]+)[^/]*/
@@ -15,31 +15,25 @@ function test(url: string): boolean {
 async function resolve(url: string): Promise<Release> {
   const doc = await fetchDocument(url)
 
-  const title = doc.querySelector('.product-header__title')?.textContent
+  const title = doc.querySelector('.product-name')?.textContent?.trim()
   if (!title) throw Error(`no release title found for url: ${url}`)
 
   let date
-  const timeEl = doc.querySelector('.product-header time')
-  if (timeEl && isTimeElement(timeEl)) date = new Date(timeEl.dateTime)
+  const dateEl = doc.querySelector("meta[property='music:release_date']")
+  if (dateEl && isMetaElement(dateEl)) date = new Date(dateEl.content)
 
   let link = url
   const linkEl = doc.querySelector("link[rel='canonical']")
   if (linkEl && isLinkElement(linkEl)) link = linkEl.href
 
-  const trackEls = Array.from(
-    doc.querySelectorAll('.product-hero__tracks tbody tr')
-  )
-  const tracks = trackEls
+  const tracks = Array.from(doc.querySelectorAll('.songs-list .song'))
     .map(trackEl => {
-      const position = trackEl
-        .querySelector('.table__row__track')
-        ?.textContent?.trim()
+      const position = trackEl.querySelector('.song-index .column-data')
+        ?.textContent
       const trackTitle = trackEl
-        .querySelector('.table__row__name')
+        .querySelector('.song-name')
         ?.textContent?.trim()
-      const duration = trackEl
-        .querySelector('.table__row__duration time')
-        ?.textContent?.trim()
+      const duration = trackEl.querySelector('.time-data')?.textContent
       if (!(position && trackTitle && duration)) return null
       return { position, title: trackTitle, duration }
     })
