@@ -53,14 +53,14 @@ async function formatTrack(
     return {
       position,
       title: track.title,
-      duration: formatMilliseconds(track.duration),
+      duration: formatMilliseconds(track.full_duration),
     }
 
   const info = await resolveTrack(track.id)
   return {
     position,
     title: info.title,
-    duration: formatMilliseconds(info.duration),
+    duration: formatMilliseconds(info.full_duration),
   }
 }
 
