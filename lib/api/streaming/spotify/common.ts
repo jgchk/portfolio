@@ -47,5 +47,3 @@ export function formatAlbum(album: Album): Release {
     tracks,
   }
 }
-
-export function formatTrack(track: SimplifiedTrack)
