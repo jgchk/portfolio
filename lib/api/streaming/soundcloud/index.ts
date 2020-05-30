@@ -1,4 +1,5 @@
-import { search as searchScrape, resolve as resolveScrape } from './scraper'
+import searchApi from './search'
+import resolveApi from './resolve'
 import { Api, Searchable, Resolvable, Release, SearchType } from '../type'
 
 async function search(
@@ -7,7 +8,7 @@ async function search(
   type: SearchType,
   limit?: number
 ): Promise<Array<Release>> {
-  return searchScrape(title, artist, type, limit)
+  return searchApi(title, artist, type, limit)
 }
 
 function test(url: string): boolean {
@@ -16,7 +17,7 @@ function test(url: string): boolean {
 }
 
 async function resolve(url: string): Promise<Release> {
-  return resolveScrape(url)
+  return resolveApi(url)
 }
 
 const api: Api & Searchable & Resolvable = {
