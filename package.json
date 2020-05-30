@@ -9,8 +9,7 @@
   "scripts": {
     "dev": "next",
     "build": "next build",
-    "start": "next start",
-    "deploy": "cd music-library-lambda && serverless deploy"
+    "start": "next start"
   },
   "dependencies": {
     "@async-generators/to-array": "^0.1.0",
