@@ -1,3 +1,10 @@
 #! /bin/sh
 
-ssh jake@161.35.5.220 'cd /home/jake/portfolio && git pull && yarn install && yarn build && /usr/lib/node_modules/pm2/bin/pm2 restart cafe'
+NAME="portfolio"
+SERVER_USER='brym'
+SERVER_IP='161.35.108.71'
+SERVER_FILES_LOCATION="~/$NAME"
+
+yarn build
+rsync -arvzz -e "ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null" --progress ./ "$SERVER_USER@$SERVER_IP:$SERVER_FILES_LOCATION"
+ssh "$SERVER_USER@$SERVER_IP" "pm2 restart $NAME"
