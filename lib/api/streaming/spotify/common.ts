@@ -32,7 +32,7 @@ export function formatAlbum(album: Album): Release {
   }
 
   const tracks = album.tracks.items.map((track, i) => ({
-    position: String(i),
+    position: String(i + 1),
     title: track.name,
     duration: formatMilliseconds(track.duration_ms),
   }))

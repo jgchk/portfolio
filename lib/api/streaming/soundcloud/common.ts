@@ -6,7 +6,7 @@ import { isFullTrack, Playlist, Track } from './types'
 
 function formatTrack(track: Track, position: number): ReleaseTrack {
   return {
-    position: position.toString(),
+    position: String(position + 1),
     title: track.title,
     duration: formatMilliseconds(track.full_duration),
   }
