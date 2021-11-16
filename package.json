@@ -16,7 +16,7 @@
     "@async-generators/to-array": "^0.1.0",
     "@tokenizer/s3": "^0.1.2",
     "@zeit/next-less": "^1.0.1",
-    "aws-sdk": "^2.626.0",
+    "aws-sdk": "^2.814.0",
     "axios": "^0.19.2",
     "bandcamp-scraper": "^1.2.4",
     "bluebird": "^3.7.2",
