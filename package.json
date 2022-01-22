@@ -32,7 +32,7 @@
     "jsdom": "^16.2.2",
     "less": "^3.11.1",
     "music-metadata": "^6.3.7",
-    "nanoid": "^2.1.11",
+    "nanoid": "^3.1.31",
     "next": "^9.2.1",
     "node-fetch": "^2.6.0",
     "react": "^16.12.0",
