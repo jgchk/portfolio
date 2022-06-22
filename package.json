@@ -28,7 +28,7 @@
     "file-type": "^14.1.4",
     "flatted": "^2.0.1",
     "get-artist-title": "jgchk/get-artist-title",
-    "got": "^11.1.4",
+    "got": "^11.8.5",
     "jsdom": "^16.2.2",
     "less": "^3.11.1",
     "music-metadata": "^6.3.7",
